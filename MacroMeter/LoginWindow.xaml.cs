@@ -49,13 +49,6 @@ namespace MacroMeter
             email = new TextBox { Margin = new Thickness(0, 5, 0, 10) };
             panel.Children.Add(email);
 
-            terms = new CheckBox
-            {
-                Content = "Súhlasím s podmienkami",
-                Margin = new Thickness(0, 10, 0, 20)
-            };
-            panel.Children.Add(terms);
-
             Button login = new Button
             {
                 Content = "Prihlásiť",
