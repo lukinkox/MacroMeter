@@ -33,9 +33,10 @@ namespace MacroMeter
             gender.Items.Add("Muž");
             gender.Items.Add("Žena");
 
-            activity = Combo();
+            activity = Combo();         
             activity.Items.Add("Sedavý");
             activity.Items.Add("Aktívny");
+            activity.Items.Add("Veľmi aktívny");
 
             goal = Combo();
             goal.Items.Add("Schudnúť");
