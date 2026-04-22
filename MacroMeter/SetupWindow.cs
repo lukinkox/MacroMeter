@@ -78,8 +78,8 @@ namespace MacroMeter
             _user.Aktivita = activity.SelectedItem?.ToString();
             _user.Ciel = goal.SelectedItem?.ToString();
 
-            MainWindow main = new MainWindow(_user);
-            main.Show();
+            LoadingWindow loading = new LoadingWindow(_user);
+            loading.Show();
             Close();
         }
 

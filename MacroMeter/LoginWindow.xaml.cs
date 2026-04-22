@@ -1,115 +1,94 @@
-﻿using System.Windows;
+﻿using System;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace MacroMeter
 {
-    public partial class LoginWindow : Window
+    public class LoadingWindow : Window
     {
-        TextBox firstName, lastName, email;
-        CheckBox terms;
+        private User _user;
+        private ProgressBar bar;
+        private TextBlock percentText;
+        private DispatcherTimer timer;
+        private int progress = 0;
 
-        public LoginWindow()
+        public LoadingWindow(User user)
         {
-            InitializeComponent();
+            _user = user;
 
-            Title = "Login";
-            Width = 420;
-            Height = 500;
+            Title = "Loading";
+            Width = 350;
+            Height = 220;
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            ResizeMode = ResizeMode.NoResize;
 
             FontFamily = new FontFamily("Segoe UI");
 
-            StackPanel panel = new StackPanel { Margin = new Thickness(25) };
+            StackPanel panel = new StackPanel
+            {
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Margin = new Thickness(20)
+            };
 
             panel.Children.Add(new TextBlock
             {
-                Text = "Login",
-                FontSize = 28,
-                FontWeight = FontWeights.SemiBold,
+                Text = "Pripravujeme tvoju fitness appku 💪",
+                FontSize = 14,
                 Margin = new Thickness(0, 0, 0, 20),
-                HorizontalAlignment = HorizontalAlignment.Center
+                TextAlignment = TextAlignment.Center
             });
 
-            panel.Children.Add(Label("Meno"));
-            firstName = Box(); panel.Children.Add(firstName);
-
-            panel.Children.Add(Label("Priezvisko"));
-            lastName = Box(); panel.Children.Add(lastName);
-
-            panel.Children.Add(Label("Email"));
-            email = Box(); panel.Children.Add(email);
-
-            terms = new CheckBox
+            bar = new ProgressBar
             {
-                Content = "Súhlasím s podmienkami",
-                Margin = new Thickness(0, 10, 0, 10)
+                Width = 250,
+                Height = 18,
+                Minimum = 0,
+                Maximum = 100
             };
-            panel.Children.Add(terms);
 
-            Button login = Button("Login", Brushes.Green);
-            login.Click += Login_Click;
+            panel.Children.Add(bar);
 
-            Button register = Button("Register", Brushes.DodgerBlue);
-            register.Margin = new Thickness(0, 10, 0, 0);
-            register.Click += Register_Click;
+            percentText = new TextBlock
+            {
+                Text = "0%",
+                Margin = new Thickness(0, 10, 0, 0),
+                HorizontalAlignment = HorizontalAlignment.Center
+            };
 
-            panel.Children.Add(login);
-            panel.Children.Add(register);
+            panel.Children.Add(percentText);
 
             Content = panel;
+
+            Loaded += LoadingWindow_Loaded;
         }
 
-        private void Login_Click(object sender, RoutedEventArgs e)
+        private void LoadingWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(firstName.Text) ||
-                string.IsNullOrWhiteSpace(lastName.Text) ||
-                string.IsNullOrWhiteSpace(email.Text))
-            {
-                MessageBox.Show("Vyplň všetko");
-                return;
-            }
-
-            if (!email.Text.Contains("@"))
-            {
-                MessageBox.Show("Zlý email");
-                return;
-            }
-
-            if (terms.IsChecked != true)
-            {
-                MessageBox.Show("Súhlas nutný");
-                return;
-            }
-
-            User user = new User
-            {
-                Meno = firstName.Text,
-                Priezvisko = lastName.Text,
-                Email = email.Text
-            };
-
-            SetupWindow setup = new SetupWindow(user);
-            setup.Show();
-            Close();
+            timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromMilliseconds(40);
+            timer.Tick += Timer_Tick;
+            timer.Start();
         }
 
-        private void Register_Click(object sender, RoutedEventArgs e)
+        private void Timer_Tick(object sender, EventArgs e)
         {
-            new RegisterWindow().Show();
-            Close();
+            progress++;
+
+            bar.Value = progress;
+            percentText.Text = progress + "%";
+
+            if (progress >= 100)
+            {
+                timer.Stop();
+
+                MainWindow main = new MainWindow(_user);
+                main.Show();
+                Close();
+            }
         }
-
-        TextBlock Label(string t) => new TextBlock { Text = t, Margin = new Thickness(0, 10, 0, 5) };
-
-        TextBox Box() => new TextBox { Height = 30 };
-
-        Button Button(string text, Brush color) => new Button
-        {
-            Content = text,
-            Height = 40,
-            Background = color,
-            Foreground = Brushes.White
-        };
     }
 }
