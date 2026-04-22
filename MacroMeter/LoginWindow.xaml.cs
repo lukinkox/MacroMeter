@@ -66,7 +66,13 @@ namespace MacroMeter
 
             login.Click += Login_Click;
 
-            Button register = CreateRoundedButton("Registrovať sa");
+            Button register = new Button
+            {
+                Content = "Registrovať sa",
+                Height = 40,
+                Background = Brushes.Blue,
+                Foreground = Brushes.White
+            };
             register.Margin = new Thickness(0, 10, 0, 0);
             register.Click += Register_Click;
 
