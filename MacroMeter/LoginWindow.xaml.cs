@@ -64,7 +64,12 @@ namespace MacroMeter
             Button login = CreateRoundedButton("Prihlásiť");
             login.Click += Login_Click;
 
+            Button register = CreateRoundedButton("Registrovať sa");
+            register.Margin = new Thickness(0, 10, 0, 0);
+            register.Click += Register_Click;
+
             panel.Children.Add(login);
+            panel.Children.Add(register);
 
             grid.Children.Add(panel);
             Content = grid;
@@ -127,5 +132,12 @@ namespace MacroMeter
             main.Show();
             Close();
         }
+
+        private void Register_Click(object sender, RoutedEventArgs e)
+        {
+            RegisterWindow register = new RegisterWindow();
+            register.Show();
+            Close();
+        }
     }
-    }
+}
