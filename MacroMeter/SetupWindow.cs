@@ -41,6 +41,7 @@ namespace MacroMeter
             gender.Items.Add("Žena");
             panel.Children.Add(gender);
 
+            // Vek
             panel.Children.Add(new TextBlock { Text = "Vek" });
             age = new TextBox { Margin = new Thickness(0, 5, 0, 10) };
             panel.Children.Add(age);
@@ -90,9 +91,32 @@ namespace MacroMeter
             {
                 MessageBox.Show("Vyplň všetky údaje");
                 return;
+            } 
+            if (!int.TryParse(age.Text, out int vek))
+            {
+                MessageBox.Show("Vek musí byť číslo!");
+                return;
             }
 
-            MessageBox.Show("Údaje uložené ✅");
+            if (!int.TryParse(height.Text, out int vyska))
+            {
+                MessageBox.Show("Výška musí byť číslo!");
+                return;
+            }
+
+            string pohlavie = gender.SelectedItem.ToString();
+            string aktivita = activity.SelectedItem.ToString();
+            string ciel = goal.SelectedItem.ToString();
+
+            MessageBox.Show(
+                "Údaje uložené ✅\n\n" +
+                $"Vek: {vek}\n" +
+                $"Výška: {vyska}\n" +
+                $"Pohlavie: {pohlavie}\n" +
+                $"Aktivita: {aktivita}\n" +
+                $"Cieľ: {ciel}"
+            );
+
             Close();
         }
     }

@@ -1,20 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace MacroMeter
 {
-    /// <summary>
-    /// Interaction logic for RegisterWindow.xaml
-    /// </summary>
     public partial class RegisterWindow : Window
     {
         TextBox Meno;
@@ -33,7 +23,9 @@ namespace MacroMeter
 
             Grid grid = new Grid();
             grid.Margin = new Thickness(20);
+
             StackPanel panel = new StackPanel();
+
             panel.Children.Add(new TextBlock
             {
                 Text = "Registrácia",
@@ -42,7 +34,6 @@ namespace MacroMeter
                 HorizontalAlignment = HorizontalAlignment.Center,
                 Margin = new Thickness(0, 0, 0, 20)
             });
-
 
             panel.Children.Add(new TextBlock { Text = "Meno" });
             Meno = new TextBox { Margin = new Thickness(0, 5, 0, 10) };
@@ -53,7 +44,7 @@ namespace MacroMeter
             panel.Children.Add(Priezvisko);
 
             panel.Children.Add(new TextBlock { Text = "Email" });
-            Email =new TextBox { Margin = new Thickness(0, 5, 0, 10) };
+            Email = new TextBox { Margin = new Thickness(0, 5, 0, 10) };
             panel.Children.Add(Email);
 
             panel.Children.Add(new TextBlock { Text = "Heslo" });
@@ -64,10 +55,10 @@ namespace MacroMeter
             confirmPassword = new PasswordBox { Margin = new Thickness(0, 5, 0, 10) };
             panel.Children.Add(confirmPassword);
 
-            terms = new CheckBox();
+            terms = new CheckBox
             {
-                Content = "Súhlasím s podmienkami";
-                Margin = new Thickness(0, 10, 0, 20);
+                Content = "Súhlasím s podmienkami",
+                Margin = new Thickness(0, 10, 0, 20)
             };
             panel.Children.Add(terms);
 
@@ -80,7 +71,6 @@ namespace MacroMeter
             };
 
             register.Click += Register_Click;
-
             panel.Children.Add(register);
 
             grid.Children.Add(panel);
@@ -89,13 +79,21 @@ namespace MacroMeter
 
         private void Register_Click(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(Meno.Text) ||
+                string.IsNullOrWhiteSpace(Priezvisko.Text) ||
+                string.IsNullOrWhiteSpace(Email.Text))
+            {
+                MessageBox.Show("Vyplň všetky polia");
+                return;
+            }
+
             if (password.Password != confirmPassword.Password)
             {
                 MessageBox.Show("Heslá sa nezhodujú");
                 return;
             }
 
-            if (terms.IsChecked == false)
+            if (terms.IsChecked != true)
             {
                 MessageBox.Show("Musíte súhlasiť s podmienkami");
                 return;
@@ -106,7 +104,7 @@ namespace MacroMeter
             LoginWindow login = new LoginWindow();
             login.Show();
 
-            Close();
+            this.Close();
         }
     }
 }

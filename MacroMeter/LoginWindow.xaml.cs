@@ -93,26 +93,29 @@ namespace MacroMeter
                 return;
             }
 
+            if (!email.Text.Contains("@") || !email.Text.Contains("."))
+            {
+                MessageBox.Show("Zadaj platný email!");
+                return;
+            }
+
             if (terms.IsChecked != true)
             {
-                MessageBox.Show("Musíte súhlasiť s podmienkami");
+                MessageBox.Show("Musíš súhlasiť s podmienkami");
                 return;
             }
 
             User user = new User()
             {
-                Meno = firstName.Text,
-                Priezvisko = lastName.Text,
-                Email = email.Text
+                Meno = firstName.Text.Trim(),
+                Priezvisko = lastName.Text.Trim(),
+                Email = email.Text.Trim()
             };
 
-            // 👉 otvorí SetupWindow
             SetupWindow setup = new SetupWindow();
             setup.Show();
-
             this.Close();
         }
-
         private void Register_Click(object sender, RoutedEventArgs e)
         {
             RegisterWindow register = new RegisterWindow();
