@@ -20,11 +20,6 @@ namespace MacroMeter
                 return;
             }
 
-            if (TermsCheckBox.IsChecked != true)
-            {
-                MessageBox.Show("Musíte súhlasiť s podmienkami.");
-                return;
-            }
 
             var user = new User
             {
