@@ -1,45 +1,28 @@
-﻿using System.Text;
+﻿using MacroMeter;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MacroMeter
 {
-        public partial class MainWindow : Window
-        {
+    public partial class MainWindow : Window
+    {
+        private User _user;
+
         public MainWindow()
         {
             InitializeComponent();
         }
+        public MainWindow(User user)
+        {
+            InitializeComponent(); 
 
-        private User _user;
+            _user = user;
 
-            public MainWindow(User user)
-            {
-                _user = user;
+            MessageBox.Show($"Vitaj {_user.Meno}!");
+        
+            SetupWindow setup = new SetupWindow();
+            setup.Show();
 
-                Title = "MacroMeter";
-                Width = 800;
-                Height = 500;
-                WindowStartupLocation = WindowStartupLocation.CenterScreen;
-
-                Grid grid = new Grid();
-
-                TextBlock welcome = new TextBlock();
-                welcome.Text = $"Vitaj {_user.Meno} {_user.Priezvisko}!";
-                welcome.FontSize = 26;
-                welcome.HorizontalAlignment = HorizontalAlignment.Center;
-                welcome.VerticalAlignment = VerticalAlignment.Center;
-
-                grid.Children.Add(welcome);
-
-                Content = grid;
-            }
+            this.Close();
         }
     }
+}
