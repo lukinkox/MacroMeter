@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -7,104 +6,65 @@ namespace MacroMeter
 {
     public partial class RegisterWindow : Window
     {
-        TextBox Meno;
-        TextBox Priezvisko;
-        TextBox Email;
-        PasswordBox password;
-        PasswordBox confirmPassword;
+        TextBox meno, priezvisko, email;
+        PasswordBox pass, confirm;
         CheckBox terms;
 
         public RegisterWindow()
         {
-            Title = "Registrácia";
-            Width = 400;
-            Height = 500;
+            InitializeComponent();
+
+            Title = "Register";
+            Width = 420;
+            Height = 550;
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-            Grid grid = new Grid();
-            grid.Margin = new Thickness(20);
-
-            StackPanel panel = new StackPanel();
+            StackPanel panel = new StackPanel { Margin = new Thickness(25) };
 
             panel.Children.Add(new TextBlock
             {
-                Text = "Registrácia",
-                FontSize = 26,
-                FontWeight = FontWeights.Bold,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                Margin = new Thickness(0, 0, 0, 20)
+                Text = "Register",
+                FontSize = 28,
+                FontWeight = FontWeights.SemiBold
             });
 
-            panel.Children.Add(new TextBlock { Text = "Meno" });
-            Meno = new TextBox { Margin = new Thickness(0, 5, 0, 10) };
-            panel.Children.Add(Meno);
+            meno = Box(); panel.Children.Add(Label("Meno")); panel.Children.Add(meno);
+            priezvisko = Box(); panel.Children.Add(Label("Priezvisko")); panel.Children.Add(priezvisko);
+            email = Box(); panel.Children.Add(Label("Email")); panel.Children.Add(email);
 
-            panel.Children.Add(new TextBlock { Text = "Priezvisko" });
-            Priezvisko = new TextBox { Margin = new Thickness(0, 5, 0, 10) };
-            panel.Children.Add(Priezvisko);
+            pass = new PasswordBox(); panel.Children.Add(Label("Heslo")); panel.Children.Add(pass);
+            confirm = new PasswordBox(); panel.Children.Add(Label("Potvrď")); panel.Children.Add(confirm);
 
-            panel.Children.Add(new TextBlock { Text = "Email" });
-            Email = new TextBox { Margin = new Thickness(0, 5, 0, 10) };
-            panel.Children.Add(Email);
-
-            panel.Children.Add(new TextBlock { Text = "Heslo" });
-            password = new PasswordBox { Margin = new Thickness(0, 5, 0, 10) };
-            panel.Children.Add(password);
-
-            panel.Children.Add(new TextBlock { Text = "Potvrďte heslo" });
-            confirmPassword = new PasswordBox { Margin = new Thickness(0, 5, 0, 10) };
-            panel.Children.Add(confirmPassword);
-
-            terms = new CheckBox
-            {
-                Content = "Súhlasím s podmienkami",
-                Margin = new Thickness(0, 10, 0, 20)
-            };
+            terms = new CheckBox { Content = "Súhlasím" };
             panel.Children.Add(terms);
 
-            Button register = new Button
+            Button btn = new Button
             {
-                Content = "Registrovať",
-                Height = 40,
+                Content = "Register",
                 Background = Brushes.Green,
-                Foreground = Brushes.White
+                Foreground = Brushes.White,
+                Height = 40
             };
+            btn.Click += Register_Click;
 
-            register.Click += Register_Click;
-            panel.Children.Add(register);
+            panel.Children.Add(btn);
 
-            grid.Children.Add(panel);
-            Content = grid;
+            Content = panel;
         }
 
         private void Register_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(Meno.Text) ||
-                string.IsNullOrWhiteSpace(Priezvisko.Text) ||
-                string.IsNullOrWhiteSpace(Email.Text))
+            if (pass.Password != confirm.Password)
             {
-                MessageBox.Show("Vyplň všetky polia");
+                MessageBox.Show("Heslá nesedia");
                 return;
             }
 
-            if (password.Password != confirmPassword.Password)
-            {
-                MessageBox.Show("Heslá sa nezhodujú");
-                return;
-            }
-
-            if (terms.IsChecked != true)
-            {
-                MessageBox.Show("Musíte súhlasiť s podmienkami");
-                return;
-            }
-
-            MessageBox.Show("Registrácia úspešná");
-
-            LoginWindow login = new LoginWindow();
-            login.Show();
-
-            this.Close();
+            new LoginWindow().Show();
+            Close();
         }
+
+        TextBlock Label(string t) => new TextBlock { Text = t, Margin = new Thickness(0, 10, 0, 5) };
+        TextBox Box() => new TextBox { Height = 30 };
     }
 }

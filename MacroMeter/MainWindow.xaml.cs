@@ -1,28 +1,20 @@
-﻿using MacroMeter;
-using System.Windows;
+﻿using System.Windows;
 
 namespace MacroMeter
 {
     public partial class MainWindow : Window
     {
-        private User _user;
-
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
         public MainWindow(User user)
         {
-            InitializeComponent(); 
+            InitializeComponent();
 
-            _user = user;
+            Title = "MacroMeter";
 
-            MessageBox.Show($"Vitaj {_user.Meno}!");
-        
-            SetupWindow setup = new SetupWindow();
-            setup.Show();
-
-            this.Close();
+            MessageBox.Show(
+                $"Vitaj {user.Meno}\n" +
+                $"Cieľ: {user.Ciel}\n" +
+                $"Vek: {user.Vek}"
+            );
         }
     }
 }

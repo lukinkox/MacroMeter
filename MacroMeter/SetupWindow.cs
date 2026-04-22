@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -7,117 +6,84 @@ namespace MacroMeter
 {
     public class SetupWindow : Window
     {
-        ComboBox gender;
-        ComboBox activity;
-        ComboBox goal;
+        private User _user;
 
-        TextBox age;
-        TextBox height;
+        ComboBox gender, activity, goal;
+        TextBox age, height;
 
-        public SetupWindow()
+        public SetupWindow(User user)
         {
-            Title = "MacroMeter - Nastavenie";
-            Width = 400;
-            Height = 500;
+            _user = user;
+
+            Title = "Setup";
+            Width = 420;
+            Height = 600;
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-            Grid grid = new Grid();
-            grid.Margin = new Thickness(20);
-
-            StackPanel panel = new StackPanel();
+            StackPanel panel = new StackPanel { Margin = new Thickness(25) };
 
             panel.Children.Add(new TextBlock
             {
-                Text = "Základné údaje",
-                FontSize = 22,
-                FontWeight = FontWeights.Bold,
-                Margin = new Thickness(0, 0, 0, 20),
-                HorizontalAlignment = HorizontalAlignment.Center
+                Text = "Setup",
+                FontSize = 28,
+                FontWeight = FontWeights.SemiBold
             });
 
-            panel.Children.Add(new TextBlock { Text = "Pohlavie" });
-            gender = new ComboBox { Margin = new Thickness(0, 5, 0, 10) };
+            gender = Combo();
             gender.Items.Add("Muž");
             gender.Items.Add("Žena");
-            panel.Children.Add(gender);
 
-            // Vek
-            panel.Children.Add(new TextBlock { Text = "Vek" });
-            age = new TextBox { Margin = new Thickness(0, 5, 0, 10) };
-            panel.Children.Add(age);
+            activity = Combo();
+            activity.Items.Add("Sedavý");
+            activity.Items.Add("Aktívny");
 
-            panel.Children.Add(new TextBlock { Text = "Výška (cm)" });
-            height = new TextBox { Margin = new Thickness(0, 5, 0, 10) };
-            panel.Children.Add(height);
-
-            panel.Children.Add(new TextBlock { Text = "Aktivita" });
-            activity = new ComboBox { Margin = new Thickness(0, 5, 0, 10) };
-            activity.Items.Add("Sedavý život");
-            activity.Items.Add("Ľahká aktivita");
-            activity.Items.Add("Stredná aktivita");
-            activity.Items.Add("Vysoká aktivita");
-            panel.Children.Add(activity);
-
-            panel.Children.Add(new TextBlock { Text = "Cieľ" });
-            goal = new ComboBox { Margin = new Thickness(0, 5, 0, 20) };
+            goal = Combo();
             goal.Items.Add("Schudnúť");
-            goal.Items.Add("Udržať váhu");
-            goal.Items.Add("Pribrať svaly");
-            panel.Children.Add(goal);
+            goal.Items.Add("Udržať");
+            goal.Items.Add("Pribrať");
 
-            Button save = new Button
+            panel.Children.Add(Label("Pohlavie")); panel.Children.Add(gender);
+            panel.Children.Add(Label("Vek")); age = Box(); panel.Children.Add(age);
+            panel.Children.Add(Label("Výška")); height = Box(); panel.Children.Add(height);
+            panel.Children.Add(Label("Aktivita")); panel.Children.Add(activity);
+            panel.Children.Add(Label("Cieľ")); panel.Children.Add(goal);
+
+            Button btn = new Button
             {
                 Content = "Pokračovať",
-                Height = 40,
                 Background = Brushes.Green,
-                Foreground = Brushes.White
+                Foreground = Brushes.White,
+                Height = 40
             };
 
-            save.Click += Save_Click;
+            btn.Click += Save_Click;
+            panel.Children.Add(btn);
 
-            panel.Children.Add(save);
-
-            grid.Children.Add(panel);
-            Content = grid;
+            Content = panel;
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            if (gender.SelectedItem == null ||
-                activity.SelectedItem == null ||
-                goal.SelectedItem == null ||
-                string.IsNullOrWhiteSpace(age.Text) ||
-                string.IsNullOrWhiteSpace(height.Text))
+            if (!int.TryParse(age.Text, out int vek) ||
+                !int.TryParse(height.Text, out int vyska))
             {
-                MessageBox.Show("Vyplň všetky údaje");
-                return;
-            } 
-            if (!int.TryParse(age.Text, out int vek))
-            {
-                MessageBox.Show("Vek musí byť číslo!");
+                MessageBox.Show("Zlé čísla");
                 return;
             }
 
-            if (!int.TryParse(height.Text, out int vyska))
-            {
-                MessageBox.Show("Výška musí byť číslo!");
-                return;
-            }
+            _user.Vek = vek;
+            _user.Vyska = vyska;
+            _user.Pohlavie = gender.SelectedItem?.ToString();
+            _user.Aktivita = activity.SelectedItem?.ToString();
+            _user.Ciel = goal.SelectedItem?.ToString();
 
-            string pohlavie = gender.SelectedItem.ToString();
-            string aktivita = activity.SelectedItem.ToString();
-            string ciel = goal.SelectedItem.ToString();
-
-            MessageBox.Show(
-                "Údaje uložené ✅\n\n" +
-                $"Vek: {vek}\n" +
-                $"Výška: {vyska}\n" +
-                $"Pohlavie: {pohlavie}\n" +
-                $"Aktivita: {aktivita}\n" +
-                $"Cieľ: {ciel}"
-            );
-
+            MainWindow main = new MainWindow(_user);
+            main.Show();
             Close();
         }
+
+        TextBlock Label(string t) => new TextBlock { Text = t, Margin = new Thickness(0, 10, 0, 5) };
+        TextBox Box() => new TextBox { Height = 30 };
+        ComboBox Combo() => new ComboBox { Height = 30 };
     }
 }

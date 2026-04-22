@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -7,73 +6,58 @@ namespace MacroMeter
 {
     public partial class LoginWindow : Window
     {
-        TextBox firstName;
-        TextBox lastName;
-        TextBox email;
+        TextBox firstName, lastName, email;
         CheckBox terms;
 
         public LoginWindow()
         {
             InitializeComponent();
 
-            Title = "MacroMeter Login";
-            Width = 400;
-            Height = 450;
+            Title = "Login";
+            Width = 420;
+            Height = 500;
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-            Grid grid = new Grid();
-            grid.Margin = new Thickness(20);
+            FontFamily = new FontFamily("Segoe UI");
 
-            StackPanel panel = new StackPanel();
+            StackPanel panel = new StackPanel { Margin = new Thickness(25) };
 
-            TextBlock title = new TextBlock
+            panel.Children.Add(new TextBlock
             {
-                Text = "MacroMeter",
-                FontSize = 26,
-                FontWeight = FontWeights.Bold,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                Margin = new Thickness(0, 0, 0, 20)
-            };
+                Text = "Login",
+                FontSize = 28,
+                FontWeight = FontWeights.SemiBold,
+                Margin = new Thickness(0, 0, 0, 20),
+                HorizontalAlignment = HorizontalAlignment.Center
+            });
 
-            panel.Children.Add(title);
+            panel.Children.Add(Label("Meno"));
+            firstName = Box(); panel.Children.Add(firstName);
 
-            panel.Children.Add(new TextBlock { Text = "Meno" });
-            firstName = new TextBox { Margin = new Thickness(0, 5, 0, 10) };
-            panel.Children.Add(firstName);
+            panel.Children.Add(Label("Priezvisko"));
+            lastName = Box(); panel.Children.Add(lastName);
 
-            panel.Children.Add(new TextBlock { Text = "Priezvisko" });
-            lastName = new TextBox { Margin = new Thickness(0, 5, 0, 10) };
-            panel.Children.Add(lastName);
+            panel.Children.Add(Label("Email"));
+            email = Box(); panel.Children.Add(email);
 
-            panel.Children.Add(new TextBlock { Text = "Email" });
-            email = new TextBox { Margin = new Thickness(0, 5, 0, 10) };
-            panel.Children.Add(email);
-
-            Button login = new Button
+            terms = new CheckBox
             {
-                Content = "Prihlásiť",
-                Height = 40,
-                Background = Brushes.Green,
-                Foreground = Brushes.White
+                Content = "Súhlasím s podmienkami",
+                Margin = new Thickness(0, 10, 0, 10)
             };
+            panel.Children.Add(terms);
 
+            Button login = Button("Login", Brushes.Green);
             login.Click += Login_Click;
 
-            Button register = new Button
-            {
-                Content = "Registrovať sa",
-                Height = 40,
-                Background = Brushes.Blue,
-                Foreground = Brushes.White
-            };
+            Button register = Button("Register", Brushes.DodgerBlue);
             register.Margin = new Thickness(0, 10, 0, 0);
             register.Click += Register_Click;
 
             panel.Children.Add(login);
             panel.Children.Add(register);
 
-            grid.Children.Add(panel);
-            Content = grid;
+            Content = panel;
         }
 
         private void Login_Click(object sender, RoutedEventArgs e)
@@ -82,38 +66,50 @@ namespace MacroMeter
                 string.IsNullOrWhiteSpace(lastName.Text) ||
                 string.IsNullOrWhiteSpace(email.Text))
             {
-                MessageBox.Show("Vyplň všetky polia");
+                MessageBox.Show("Vyplň všetko");
                 return;
             }
 
-            if (!email.Text.Contains("@") || !email.Text.Contains("."))
+            if (!email.Text.Contains("@"))
             {
-                MessageBox.Show("Zadaj platný email!");
+                MessageBox.Show("Zlý email");
                 return;
             }
 
             if (terms.IsChecked != true)
             {
-                MessageBox.Show("Musíš súhlasiť s podmienkami");
+                MessageBox.Show("Súhlas nutný");
                 return;
             }
 
-            User user = new User()
+            User user = new User
             {
-                Meno = firstName.Text.Trim(),
-                Priezvisko = lastName.Text.Trim(),
-                Email = email.Text.Trim()
+                Meno = firstName.Text,
+                Priezvisko = lastName.Text,
+                Email = email.Text
             };
 
-            SetupWindow setup = new SetupWindow();
+            SetupWindow setup = new SetupWindow(user);
             setup.Show();
-            this.Close();
-        }
-        private void Register_Click(object sender, RoutedEventArgs e)
-        {
-            RegisterWindow register = new RegisterWindow();
-            register.Show();
             Close();
         }
+
+        private void Register_Click(object sender, RoutedEventArgs e)
+        {
+            new RegisterWindow().Show();
+            Close();
+        }
+
+        TextBlock Label(string t) => new TextBlock { Text = t, Margin = new Thickness(0, 10, 0, 5) };
+
+        TextBox Box() => new TextBox { Height = 30 };
+
+        Button Button(string text, Brush color) => new Button
+        {
+            Content = text,
+            Height = 40,
+            Background = color,
+            Foreground = Brushes.White
+        };
     }
 }

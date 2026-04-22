@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MacroMeter
+﻿namespace MacroMeter
 {
     public class User
-    {
-            public string Meno { get; set; }
-            public string Priezvisko { get; set; }
-            public string Email { get; set; }
-            public string Váha { get; set; }
-            public string Ciel { get; set; }
-            public string TypDiety { get; set; }
+{
+    public string Meno { get; set; }
+    public string Priezvisko { get; set; }
+    public string Email { get; set; }
 
-    }
+    public int Vek { get; set; }
+    public int Vyska { get; set; }
+    public string Pohlavie { get; set; }
+    public string Aktivita { get; set; }
+    public string Ciel { get; set; }
+}
 }
