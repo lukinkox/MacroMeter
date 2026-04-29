@@ -24,9 +24,7 @@ namespace MacroMeter
                 Email = EmailBox.Text.Trim()
             };
 
-            var setup = new SetupWindow(user);
-            setup.Show();
-            Close();
+           
         }
 
         private void Register_Click(object sender, RoutedEventArgs e)
