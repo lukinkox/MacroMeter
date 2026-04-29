@@ -22,6 +22,7 @@ namespace MacroMeter
             {
                 MessageBox.Show("Heslá nesedia");
                 return;
+
             }
 
             User user = new User()
