@@ -9,7 +9,7 @@
     <ScrollViewer>
         <StackPanel Margin="25">
 
-            <TextBlock Text="Register"
+            <TextBlock Text="Registrácia"
                        FontSize="28"
                        FontWeight="SemiBold"
                        Margin="0,0,0,20"/>
@@ -33,7 +33,7 @@
                       Content="Súhlasím s podmienkami"
                       Margin="0,15,0,15"/>
 
-            <Button Content="Register"
+            <Button Content="Registrovať sa"
                     Height="40"
                     Background="Green"
                     Foreground="White"

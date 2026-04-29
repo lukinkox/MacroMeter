@@ -12,9 +12,7 @@ namespace MacroMeter
 
         private void Login_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(FirstNameBox.Text) ||
-                string.IsNullOrWhiteSpace(LastNameBox.Text) ||
-                string.IsNullOrWhiteSpace(EmailBox.Text))
+            if (string.IsNullOrWhiteSpace(EmailBox.Text))
             {
                 MessageBox.Show("Vyplňte všetky polia.");
                 return;
@@ -23,8 +21,6 @@ namespace MacroMeter
 
             var user = new User
             {
-                Meno = FirstNameBox.Text.Trim(),
-                Priezvisko = LastNameBox.Text.Trim(),
                 Email = EmailBox.Text.Trim()
             };
 
