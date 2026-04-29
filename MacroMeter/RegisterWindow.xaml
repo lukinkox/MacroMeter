@@ -33,7 +33,7 @@
                       Content="Súhlasím s podmienkami"
                       Margin="0,15,0,15"/>
 
-            <Button Content="Registrovať sa"
+            <Button Content="Pokračovať"
                     Height="40"
                     Background="Green"
                     Foreground="White"

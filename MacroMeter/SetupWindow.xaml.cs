@@ -38,8 +38,8 @@ namespace MacroMeter
             _user.Aktivita = (ActivityBox.SelectedItem as ComboBoxItem)?.Content.ToString();
             _user.Ciel = (GoalBox.SelectedItem as ComboBoxItem)?.Content.ToString();
 
-            LoginWindow login = new LoginWindow();
-            login.Show();
+            LoadingWindow loading = new LoadingWindow(_user);
+            loading.Show();
 
             Close();
         }
