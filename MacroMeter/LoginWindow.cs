@@ -18,6 +18,7 @@ namespace MacroMeter
                 return;
             }
 
+
             User user = Database.GetUser(EmailBox.Text, PassBox.Password);
 
             if (user == null)
@@ -26,7 +27,8 @@ namespace MacroMeter
                 return;
             }
 
-            new SetupWindow(user).Show();
+            MainWindow main = new MainWindow(user);
+            main.Show();
             Close();
         }
 

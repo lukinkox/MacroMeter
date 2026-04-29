@@ -41,9 +41,7 @@ namespace MacroMeter
                 MessageBox.Show("Email už existuje!");
                 return;
             }
-            MessageBox.Show("Idem ukladať usera...");
-            Database.SaveUser(user);
-            MessageBox.Show("User uložený!");
+
             MessageBox.Show("Registrácia úspešná");
 
             new LoginWindow().Show();
