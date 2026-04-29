@@ -9,6 +9,7 @@ namespace MacroMeter
         TextBox meno, priezvisko, email;
         PasswordBox pass, confirm;
         CheckBox terms;
+        private User user;
 
         public RegisterWindow()
         {
@@ -23,8 +24,19 @@ namespace MacroMeter
                 return;
             }
 
-            new LoginWindow().Show();
+            User user = new User()
+            {
+                Meno = MenoBox.Text.Trim(),
+                Priezvisko = PriezviskoBox.Text.Trim(),
+                Email = EmailBox.Text.Trim(),
+                Password = PassBox.Password
+            };
+
+            SetupWindow setup = new SetupWindow(user);
+            setup.Show();
+
             Close();
+
         }
 
     }
