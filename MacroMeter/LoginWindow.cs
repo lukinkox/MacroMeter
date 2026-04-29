@@ -7,24 +7,27 @@ namespace MacroMeter
         public LoginWindow()
         {
             InitializeComponent();
-            Title = "MacroMeter Login";
         }
 
         private void Login_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(EmailBox.Text))
+            if (string.IsNullOrWhiteSpace(EmailBox.Text) ||
+                string.IsNullOrWhiteSpace(PassBox.Password))
             {
-                MessageBox.Show("Vyplňte všetky polia.");
+                MessageBox.Show("Zadaj email a heslo");
                 return;
             }
 
+            User user = Database.GetUser(EmailBox.Text, PassBox.Password);
 
-            var user = new User
+            if (user == null)
             {
-                Email = EmailBox.Text.Trim()
-            };
+                MessageBox.Show("Zlý email alebo heslo");
+                return;
+            }
 
-           
+            new SetupWindow(user).Show();
+            Close();
         }
 
         private void Register_Click(object sender, RoutedEventArgs e)

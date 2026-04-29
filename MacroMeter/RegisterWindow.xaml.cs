@@ -4,8 +4,6 @@ namespace MacroMeter
 {
     public partial class RegisterWindow : Window
     {
-        private User user;
-
         public RegisterWindow()
         {
             InitializeComponent();
@@ -17,7 +15,7 @@ namespace MacroMeter
                 string.IsNullOrWhiteSpace(PriezviskoBox.Text) ||
                 string.IsNullOrWhiteSpace(EmailBox.Text))
             {
-                MessageBox.Show("Vyplň všetky polia");
+                MessageBox.Show("Vyplň všetko");
                 return;
             }
 
@@ -25,19 +23,30 @@ namespace MacroMeter
             {
                 MessageBox.Show("Heslá nesedia");
                 return;
-
-            }
-        
-            user = new User
+            }         
+            User user = new User
             {
                 Meno = MenoBox.Text.Trim(),
                 Priezvisko = PriezviskoBox.Text.Trim(),
                 Email = EmailBox.Text.Trim(),
                 Password = PassBox.Password
             };
-            SetupWindow setup = new SetupWindow(user);
-            setup.Show();
 
+            try
+            {
+                Database.SaveUser(user);
+            }
+            catch
+            {
+                MessageBox.Show("Email už existuje!");
+                return;
+            }
+            MessageBox.Show("Idem ukladať usera...");
+            Database.SaveUser(user);
+            MessageBox.Show("User uložený!");
+            MessageBox.Show("Registrácia úspešná");
+
+            new LoginWindow().Show();
             Close();
         }
     }
