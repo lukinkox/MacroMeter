@@ -7,6 +7,8 @@ namespace MacroMeter
         public LoginWindow()
         {
             InitializeComponent();
+            Database.Initialize();
+
         }
 
         private void Login_Click(object sender, RoutedEventArgs e)

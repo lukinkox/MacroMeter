@@ -1,12 +1,57 @@
 ﻿<Window x:Class="MacroMeter.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MacroMeter"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MacroMeter"
+        Height="600"
+        Width="400"
+        WindowStartupLocation="CenterScreen"
+        Background="#F5F5F5">
 
-    </Grid>
+    <StackPanel Margin="20">
+
+        <TextBlock Text="MacroMeter"
+           FontSize="32"
+           FontWeight="Bold"
+           HorizontalAlignment="Center"
+           Margin="0,10,0,20"/>
+
+        <TextBlock x:Name="WelcomeText"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   Margin="0,0,0,20"/>
+
+        <Button Content="🔍 Vyhľadať jedlo"
+                Height="50"
+                Margin="0,5"
+                Click="SearchFood_Click"/>
+
+        <Button Content="📊 Denný príjem"
+                Height="50"
+                Margin="0,5"
+                Click="DailyIntake_Click"/>
+
+        <Button Content="➕ Pridať vlastné jedlo"
+                Height="50"
+                Margin="0,5"
+                Click="AddFood_Click"/>
+
+        <Button Content="⚙️ Nastavenia"
+                Height="50"
+                Margin="0,5"
+                Click="Settings_Click"/>
+
+        <Button Content="👤 Profil používateľa"
+        Height="50"
+        Margin="0,5"
+        Click="Profile_Click"/>
+
+        <Button Content="🚪 Odhlásiť sa"
+                Height="50"
+                Margin="0,20,0,0"
+                Background="Red"
+                Foreground="White"
+                Click="Logout_Click"/>
+
+    </StackPanel>
+
 </Window>

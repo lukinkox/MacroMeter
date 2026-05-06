@@ -11,6 +11,8 @@ namespace MacroMeter
             base.OnStartup(e);
 
             Database.Initialize();
+
+            new LoginWindow().Show();
         }
     }
 }

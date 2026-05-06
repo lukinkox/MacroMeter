@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
 using System.IO;
+using System.Windows;
 
 namespace MacroMeter
 {
@@ -10,24 +11,28 @@ namespace MacroMeter
 
         public static void Initialize()
         {
-            if (!File.Exists(dbPath))
+            using (var connection = new SqliteConnection($"Data Source={dbPath}"))
             {
-                using (var connection = new SqliteConnection($"Data Source={dbPath}"))
-                {
-                    connection.Open();
+                connection.Open();
 
-                    var command = connection.CreateCommand();
-                    command.CommandText =
-                    @"CREATE TABLE Users (
-                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        Meno TEXT,
-                        Priezvisko TEXT,
-                        Email TEXT UNIQUE,
-                        Password TEXT
-                    );";
+                var command = connection.CreateCommand();
+                command.CommandText =
+                @"CREATE TABLE IF NOT EXISTS Users (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            Meno TEXT,
+            Priezvisko TEXT,
+            Email TEXT UNIQUE,
+            Password TEXT,
+            Vaha REAL,
+            CielovaVaha REAL,
+            Vek INTEGER,
+            Vyska INTEGER,
+            Pohlavie TEXT,
+            Aktivita TEXT,
+            Ciel TEXT
+        );";
 
-                    command.ExecuteNonQuery();
-                }
+                command.ExecuteNonQuery();
             }
         }
 
@@ -59,6 +64,27 @@ namespace MacroMeter
             }
         }
 
+
+        public static bool UserExists(string email)
+        {
+            using (var connection = new SqliteConnection($"Data Source={dbPath}"))
+            {
+                connection.Open();
+
+                var command = connection.CreateCommand();
+                command.CommandText =
+                @"SELECT 1 FROM Users 
+          WHERE Email = $email
+          LIMIT 1";
+
+                command.Parameters.AddWithValue("$email", email);
+
+                using (var reader = command.ExecuteReader())
+                {
+                    return reader.Read();
+                }
+            }
+        }
         public static User GetUser(string email, string password)
         {
             using (var connection = new SqliteConnection($"Data Source={dbPath}"))

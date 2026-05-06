@@ -52,18 +52,7 @@
                     Foreground="White"
                     Margin="0,20,0,0"
                     Click="Save_Click">
-                    <Button.Template>
-        <ControlTemplate TargetType="Button">
-            <Border CornerRadius="15"
-                    Background="{TemplateBinding Background}">
-                <ContentPresenter
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"/>
-            </Border>
-        </ControlTemplate>
-    </Button.Template>
-
-</Button>
+            </Button>
 
         </StackPanel>
     </ScrollViewer>

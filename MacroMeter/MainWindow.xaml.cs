@@ -7,14 +7,38 @@ namespace MacroMeter
         public MainWindow(User user)
         {
             InitializeComponent();
+        }
 
-            Title = "MacroMeter";
+        private void SearchFood_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("vyhladavanie jedla");
+        }
 
-            MessageBox.Show(
-                $"Vitaj {user.Meno}\n" +
-                $"Cieľ: {user.Ciel}\n" +
-                $"Vek: {user.Vek}"
-            );
+        private void DailyIntake_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Tu je dennny prijem");
+        }
+
+        private void AddFood_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("tu bdue vlastne jedlo");
+        }
+
+        private void Settings_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("nastavenia");
+        }
+
+        private void Logout_Click(object sender, RoutedEventArgs e)
+        {
+            new LoginWindow().Show();
+            Close();
+        }
+ 
+
+        private void Profile_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("profil usera");
         }
     }
 }

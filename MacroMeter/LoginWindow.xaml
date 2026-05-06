@@ -35,6 +35,7 @@
                     Foreground="White"
                     Margin="0,15,0,0"
                     Click="Register_Click"/>
+            
 
         </StackPanel>
 

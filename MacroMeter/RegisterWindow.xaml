@@ -21,7 +21,7 @@
             <TextBox x:Name="PriezviskoBox" Height="30"/>
 
             <TextBlock Text="Email" Margin="0,10,0,0"/>
-            <TextBox x:Name="EmailBox" Height="30"/>
+            <TextBox x:Name="EmailBox" Height="30" TextChanged="EmailBox_TextChanged"/>
 
             <TextBlock Text="Heslo" Margin="0,10,0,0"/>
             <PasswordBox x:Name="PassBox" Height="30"/>

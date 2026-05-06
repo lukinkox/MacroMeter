@@ -29,23 +29,27 @@ namespace MacroMeter
                 Meno = MenoBox.Text.Trim(),
                 Priezvisko = PriezviskoBox.Text.Trim(),
                 Email = EmailBox.Text.Trim(),
-                Password = PassBox.Password
+                Password = PassBox.Password,
+
+                Vaha = 0,
+                CielovaVaha = 0,
+                Vek = 0,
+                Vyska = 0,
+                Pohlavie = "",
+                Aktivita = "",
+                Ciel = ""
             };
 
-            try
-            {
-                Database.SaveUser(user);
-            }
-            catch
-            {
-                MessageBox.Show("Email už existuje!");
-                return;
-            }
 
             MessageBox.Show("Registrácia úspešná");
 
-            new LoginWindow().Show();
+            new SetupWindow(user).Show();
             Close();
+        }
+
+        private void EmailBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+
         }
     }
 }
