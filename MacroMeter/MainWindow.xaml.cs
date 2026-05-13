@@ -12,39 +12,35 @@ namespace MacroMeter
             InitializeComponent();
             _user = user;
 
-            // Nastavenie úvodných textov
             WelcomeText.Text = $"Vitaj, {_user.Meno}! 👋";
 
-            // Načítanie výpočtov do dashboardu
             UpdateDashboardValues();
         }
 
-        // --- LOGIKA PREPÍNANIA SEKCIÍ ---
+
 
         private void HideAllSections()
         {
             DashboardSection.Visibility = Visibility.Collapsed;
             AddFoodSection.Visibility = Visibility.Collapsed;
-            // Sem pridáš ďalšie sekcie (napr. ProfileSection), keď ich vyrobíš v XAML
+
         }
 
         private void SearchFood_Click(object sender, RoutedEventArgs e)
         {
-            // Návrat na hlavný dashboard (podľa tvojho XAML)
+
             HideAllSections();
             DashboardSection.Visibility = Visibility.Visible;
         }
 
         private void AddFood_Click(object sender, RoutedEventArgs e)
         {
-            // Prepnutie na formulár pridania jedla priamo v okne
             HideAllSections();
             AddFoodSection.Visibility = Visibility.Visible;
         }
 
         private void DailyIntake_Click(object sender, RoutedEventArgs e)
         {
-            // Môžeš buď prepnúť sekciu, alebo zatiaľ nechať tento MessageBox
             double calories = CalculateCalories();
             MessageBox.Show($"Tvoj odporúčaný denný príjem je: {calories:F0} kcal", "Denný príjem");
         }
@@ -64,7 +60,6 @@ namespace MacroMeter
 
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
-            // Ak chceš nastavenia ako samostatné okno, nechaj takto:
             new SettingsWindow().ShowDialog();
         }
 
@@ -74,19 +69,15 @@ namespace MacroMeter
             this.Close();
         }
 
-        // --- VÝPOČTOVÁ LOGIKA (Tvoja pôvodná, upravená pre Dashboard) ---
-
         private void UpdateDashboardValues()
         {
-            // Výpočet BMI
-            double bmi = CalculateBMI(_user.Vaha, _user.Vyska);
-            BMIText.Text = $"{bmi:F1}"; // Len číslo, popis je v XAML
 
-            // Výpočet kalórií
+            double bmi = CalculateBMI(_user.Vaha, _user.Vyska);
+            BMIText.Text = $"{bmi:F1}"; 
+
             double calories = CalculateCalories();
             CaloriesText.Text = $"0 / {calories:F0} kcal";
 
-            // Váha
             WeightText.Text = $"{_user.Vaha} kg";
         }
 
