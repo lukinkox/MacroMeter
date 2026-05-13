@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 namespace MacroMeter
 {
@@ -9,104 +10,43 @@ namespace MacroMeter
         public MainWindow(User user)
         {
             InitializeComponent();
-
             _user = user;
 
+            // Nastavenie úvodných textov
             WelcomeText.Text = $"Vitaj, {_user.Meno}! 👋";
 
-            LoadDashboard();
+            // Načítanie výpočtov do dashboardu
+            UpdateDashboardValues();
         }
 
-        private void LoadDashboard()
+        // --- LOGIKA PREPÍNANIA SEKCIÍ ---
+
+        private void HideAllSections()
         {
-            WeightText.Text = $"Aktuálna váha: {_user.Vaha} kg";
-
-            double bmi = CalculateBMI(_user.Vaha, _user.Vyska);
-
-            BMIText.Text = $"BMI: {bmi:F1} ({GetBMICategory(bmi)})";
-
-            double calories = CalculateCalories();
-
-            CaloriesText.Text = $"Denné kalórie: {calories:F0} kcal";
-        }
-
-        private double CalculateBMI(double weight, int height)
-        {
-            double heightMeters = height / 100.0;
-
-            return weight / (heightMeters * heightMeters);
-        }
-
-        private string GetBMICategory(double bmi)
-        {
-            if (bmi < 18.5)
-                return "Podváha";
-
-            if (bmi < 25)
-                return "Normálna váha";
-
-            if (bmi < 30)
-                return "Nadváha";
-
-            return "Obezita";
-        }
-
-        private double CalculateCalories()
-        {
-            double bmr;
-
-            if (_user.Pohlavie == "Muž")
-            {
-                bmr = 10 * _user.Vaha +
-                      6.25 * _user.Vyska -
-                      5 * _user.Vek + 5;
-            }
-            else
-            {
-                bmr = 10 * _user.Vaha +
-                      6.25 * _user.Vyska -
-                      5 * _user.Vek - 161;
-            }
-
-            double multiplier = 1.2;
-
-            switch (_user.Aktivita)
-            {
-                case "Nízka":
-                    multiplier = 1.2;
-                    break;
-
-                case "Stredná":
-                    multiplier = 1.55;
-                    break;
-
-                case "Vysoká":
-                    multiplier = 1.9;
-                    break;
-            }
-
-            return bmr * multiplier;
+            DashboardSection.Visibility = Visibility.Collapsed;
+            AddFoodSection.Visibility = Visibility.Collapsed;
+            // Sem pridáš ďalšie sekcie (napr. ProfileSection), keď ich vyrobíš v XAML
         }
 
         private void SearchFood_Click(object sender, RoutedEventArgs e)
         {
-            new FoodSearchWindow().ShowDialog();
-        }
-
-        private void DailyIntake_Click(object sender, RoutedEventArgs e)
-        {
-            string info =
-                $"Denný prehľad:\n\n" +
-                $"Váha: {_user.Vaha} kg\n" +
-                $"BMI: {CalculateBMI(_user.Vaha, _user.Vyska):F1}\n" +
-                $"Odporúčané kalórie: {CalculateCalories():F0} kcal";
-
-            MessageBox.Show(info, "Denný príjem");
+            // Návrat na hlavný dashboard (podľa tvojho XAML)
+            HideAllSections();
+            DashboardSection.Visibility = Visibility.Visible;
         }
 
         private void AddFood_Click(object sender, RoutedEventArgs e)
         {
-            new AddFoodWindow().ShowDialog();
+            // Prepnutie na formulár pridania jedla priamo v okne
+            HideAllSections();
+            AddFoodSection.Visibility = Visibility.Visible;
+        }
+
+        private void DailyIntake_Click(object sender, RoutedEventArgs e)
+        {
+            // Môžeš buď prepnúť sekciu, alebo zatiaľ nechať tento MessageBox
+            double calories = CalculateCalories();
+            MessageBox.Show($"Tvoj odporúčaný denný príjem je: {calories:F0} kcal", "Denný príjem");
         }
 
         private void Profile_Click(object sender, RoutedEventArgs e)
@@ -124,14 +64,59 @@ namespace MacroMeter
 
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
+            // Ak chceš nastavenia ako samostatné okno, nechaj takto:
             new SettingsWindow().ShowDialog();
         }
 
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
             new LoginWindow().Show();
-            Close();
+            this.Close();
         }
 
+        // --- VÝPOČTOVÁ LOGIKA (Tvoja pôvodná, upravená pre Dashboard) ---
+
+        private void UpdateDashboardValues()
+        {
+            // Výpočet BMI
+            double bmi = CalculateBMI(_user.Vaha, _user.Vyska);
+            BMIText.Text = $"{bmi:F1}"; // Len číslo, popis je v XAML
+
+            // Výpočet kalórií
+            double calories = CalculateCalories();
+            CaloriesText.Text = $"0 / {calories:F0} kcal";
+
+            // Váha
+            WeightText.Text = $"{_user.Vaha} kg";
+        }
+
+        private double CalculateBMI(double weight, int height)
+        {
+            double heightMeters = height / 100.0;
+            return weight / (heightMeters * heightMeters);
+        }
+
+        private double CalculateCalories()
+        {
+            double bmr;
+            if (_user.Pohlavie == "Muž")
+            {
+                bmr = (10 * _user.Vaha) + (6.25 * _user.Vyska) - (5 * _user.Vek) + 5;
+            }
+            else
+            {
+                bmr = (10 * _user.Vaha) + (6.25 * _user.Vyska) - (5 * _user.Vek) - 161;
+            }
+
+            double multiplier = _user.Aktivita switch
+            {
+                "Nízka" => 1.2,
+                "Stredná" => 1.55,
+                "Vysoká" => 1.9,
+                _ => 1.2
+            };
+
+            return bmr * multiplier;
+        }
     }
 }

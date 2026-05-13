@@ -58,12 +58,12 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Grid.Row="0" VerticalAlignment="Center">
-                    <TextBlock Text="MACROMETER" Foreground="White" FontSize="22" FontWeight="Bold" HorizontalAlignment="Center"
-                    ></TextBlock><Separator Margin="30,10" Background="#3D4E63"/>
+                    <TextBlock Text="MACROMETER" Foreground="White" FontSize="22" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <Separator Margin="30,10" Background="#3D4E63"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Margin="0,10">
-                    <Button Content="🔍  Vyhľadať jedlo" Style="{StaticResource MenuButtonStyle}" Click="SearchFood_Click"/>
+                    <Button Content="🔍  Dashboard" Style="{StaticResource MenuButtonStyle}" Click="SearchFood_Click"/>
                     <Button Content="📊  Denný príjem" Style="{StaticResource MenuButtonStyle}" Click="DailyIntake_Click"/>
                     <Button Content="➕  Pridať jedlo" Style="{StaticResource MenuButtonStyle}" Click="AddFood_Click"/>
                     <Button Content="👤  Profil" Style="{StaticResource MenuButtonStyle}" Click="Profile_Click"/>
@@ -83,57 +83,93 @@
             </Grid>
         </Border>
 
-        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
-            <StackPanel Margin="30">
-                <TextBlock x:Name="WelcomeText" Text="Ahoj, Peter! 👋" FontSize="28" FontWeight="Bold" Foreground="#2C3E50" Margin="10,0,0,5"/>
-                <TextBlock Text="Dnes máte skvelý nábeh na splnenie cieľov." FontSize="14" Foreground="#7F8C8D" Margin="12,0,0,25"/>
+        <Grid Grid.Column="1">
 
-                <TextBlock Text="📊 Osobný Dashboard" FontSize="18" FontWeight="SemiBold" Foreground="#7F8C8D" Margin="10,0,0,10"/>
+            <ScrollViewer x:Name="DashboardSection" Visibility="Visible" VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="30">
+                    <TextBlock x:Name="WelcomeText" Text="Ahoj, Peter! 👋" FontSize="28" FontWeight="Bold" Foreground="#2C3E50" Margin="10,0,0,5"/>
+                    <TextBlock Text="Dnes máte skvelý nábeh na splnenie cieľov." FontSize="14" Foreground="#7F8C8D" Margin="12,0,0,25"/>
 
-                <UniformGrid Columns="2">
+                    <TextBlock Text="📊 Osobný Dashboard" FontSize="18" FontWeight="SemiBold" Foreground="#7F8C8D" Margin="10,0,0,10"/>
+
+                    <UniformGrid Columns="2">
+                        <Border Style="{StaticResource DashboardCard}">
+                            <StackPanel>
+                                <TextBlock Text="Aktuálna váha" Foreground="#95A5A6" FontSize="14"/>
+                                <TextBlock x:Name="WeightText" Text="78.2 kg" FontSize="26" FontWeight="Bold" Margin="0,5" Foreground="#2C3E50"/>
+                                <TextBlock Text="↘️ -0.5 kg od minule" FontSize="12" Foreground="#27AE60" FontWeight="Medium"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource DashboardCard}">
+                            <StackPanel>
+                                <TextBlock Text="BMI Index" Foreground="#95A5A6" FontSize="14"/>
+                                <TextBlock x:Name="BMIText" Text="23.1" FontSize="26" FontWeight="Bold" Margin="0,5" Foreground="#2C3E50"/>
+                                <TextBlock Text="V norme ✅" FontSize="12" Foreground="#27AE60" FontWeight="Medium"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource DashboardCard}">
+                            <StackPanel>
+                                <TextBlock Text="Kalórie dnes" Foreground="#95A5A6" FontSize="14"/>
+                                <TextBlock x:Name="CaloriesText" Text="1850 / 2200 kcal" FontSize="22" FontWeight="Bold" Margin="0,5" Foreground="#2C3E50"/>
+                                <TextBlock Text="Zostáva doplniť 350 kcal" FontSize="12" Foreground="#E67E22" FontWeight="Medium"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource DashboardCard}">
+                            <StackPanel>
+                                <TextBlock Text="Cieľová váha" Foreground="#95A5A6" FontSize="14"/>
+                                <TextBlock Text="75.0 kg" FontSize="26" FontWeight="Bold" Margin="0,5" Foreground="#2C3E50"/>
+                                <ProgressBar Value="70" Height="8" Margin="0,5" Background="#ECF0F1" Foreground="#3498DB"/>
+                            </StackPanel>
+                        </Border>
+                    </UniformGrid>
+
+                    <Border Style="{StaticResource DashboardCard}" Height="220" Margin="10,20,10,10">
+                        <Grid>
+                            <TextBlock Text="Týždenný progres váhy" VerticalAlignment="Top" HorizontalAlignment="Left" FontWeight="SemiBold" Foreground="#7F8C8D"/>
+                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <TextBlock Text="📈" FontSize="40" HorizontalAlignment="Center" Opacity="0.3"/>
+                                <TextBlock Text="Graf bude dostupný po prepojení s LiveCharts" Foreground="#BDC3C7" FontStyle="Italic"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <ScrollViewer x:Name="AddFoodSection" Visibility="Collapsed" VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="30">
+                    <TextBlock Text="➕ Pridať nové jedlo" FontSize="28" FontWeight="Bold" Foreground="#2C3E50" Margin="10,0,0,25"/>
                     <Border Style="{StaticResource DashboardCard}">
                         <StackPanel>
-                            <TextBlock Text="Aktuálna váha" Foreground="#95A5A6" FontSize="14"/>
-                            <TextBlock x:Name="WeightText" Text="78.2 kg" FontSize="26" FontWeight="Bold" Margin="0,5" Foreground="#2C3E50"/>
-                            <TextBlock Text="↘️ -0.5 kg od minule" FontSize="12" Foreground="#27AE60" FontWeight="Medium"/>
+                            <TextBlock Text="Názov jedla" Foreground="#34495E" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <Border BorderBrush="#DCE1E8" BorderThickness="1" CornerRadius="8" Margin="0,0,0,15">
+                                <TextBox Height="35" BorderThickness="0" Background="Transparent" VerticalContentAlignment="Center" Padding="10,0"/>
+                            </Border>
+
+                            <TextBlock Text="Množstvo (g / ml)" Foreground="#34495E" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <Border BorderBrush="#DCE1E8" BorderThickness="1" CornerRadius="8" Margin="0,0,0,15">
+                                <TextBox Height="35" BorderThickness="0" Background="Transparent" VerticalContentAlignment="Center" Padding="10,0"/>
+                            </Border>
+
+                            <TextBlock Text="Kalórie (kcal)" Foreground="#34495E" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <Border BorderBrush="#DCE1E8" BorderThickness="1" CornerRadius="8" Margin="0,0,0,25">
+                                <TextBox Height="35" BorderThickness="0" Background="Transparent" VerticalContentAlignment="Center" Padding="10,0"/>
+                            </Border>
+
+                            <Button Content="ULOŽIŤ JEDLO" Height="45" Background="#27AE60" Foreground="White" FontWeight="Bold" Cursor="Hand">
+                                <Button.Resources>
+                                    <Style TargetType="Border">
+                                        <Setter Property="CornerRadius" Value="10"/>
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
                         </StackPanel>
                     </Border>
+                </StackPanel>
+            </ScrollViewer>
 
-                    <Border Style="{StaticResource DashboardCard}">
-                        <StackPanel>
-                            <TextBlock Text="BMI Index" Foreground="#95A5A6" FontSize="14"/>
-                            <TextBlock x:Name="BMIText" Text="23.1" FontSize="26" FontWeight="Bold" Margin="0,5" Foreground="#2C3E50"/>
-                            <TextBlock Text="V norme ✅" FontSize="12" Foreground="#27AE60" FontWeight="Medium"/>
-                        </StackPanel>
-                    </Border>
-
-                    <Border Style="{StaticResource DashboardCard}">
-                        <StackPanel>
-                            <TextBlock Text="Kalórie dnes" Foreground="#95A5A6" FontSize="14"/>
-                            <TextBlock x:Name="CaloriesText" Text="1850 / 2200 kcal" FontSize="22" FontWeight="Bold" Margin="0,5" Foreground="#2C3E50"/>
-                            <TextBlock Text="Zostáva doplniť 350 kcal" FontSize="12" Foreground="#E67E22" FontWeight="Medium"/>
-                        </StackPanel>
-                    </Border>
-
-                    <Border Style="{StaticResource DashboardCard}">
-                        <StackPanel>
-                            <TextBlock Text="Cieľová váha" Foreground="#95A5A6" FontSize="14"/>
-                            <TextBlock Text="75.0 kg" FontSize="26" FontWeight="Bold" Margin="0,5" Foreground="#2C3E50"/>
-                            <ProgressBar Value="70" Height="8" Margin="0,5" Background="#ECF0F1" Foreground="#3498DB"/>
-                        </StackPanel>
-                    </Border>
-                </UniformGrid>
-
-                <Border Style="{StaticResource DashboardCard}" Height="220" Margin="10,20,10,10">
-                    <Grid>
-                        <TextBlock Text="Týždenný progres váhy" VerticalAlignment="Top" HorizontalAlignment="Left" FontWeight="SemiBold" Foreground="#7F8C8D"/>
-                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                            <TextBlock Text="📈" FontSize="40" HorizontalAlignment="Center" Opacity="0.3"/>
-                            <TextBlock Text="Graf bude dostupný po prepojení s LiveCharts" Foreground="#BDC3C7" FontStyle="Italic"/>
-                        </StackPanel>
-                    </Grid>
-                </Border>
-            </StackPanel>
-        </ScrollViewer>
+        </Grid>
     </Grid>
 </Window>
