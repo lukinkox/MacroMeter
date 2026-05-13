@@ -7,7 +7,10 @@ namespace MacroMeter
     public partial class MainWindow : Window
     {
         private User _user;
-        private double eatenToday = 0;
+        private double eatenCalories = 0;
+        private double eatenProteins = 0;
+        private double eatenCarbs = 0;
+        private double eatenFats = 0;
 
         public MainWindow(User user)
         {
@@ -17,6 +20,7 @@ namespace MacroMeter
             WelcomeText.Text = $"Vitaj, {_user.Meno}! 👋";
             UpdateDashboardValues();
         }
+
         private void HideAllSections()
         {
             DashboardSection.Visibility = Visibility.Collapsed;
@@ -41,10 +45,7 @@ namespace MacroMeter
         {
             HideAllSections();
             DailyIntakeSection.Visibility = Visibility.Visible;
-            double targetCalories = CalculateCalories();
-            ProteinsText.Text = $"0g / {(_user.Vaha * 1.8):F0}g";
-            CarbsText.Text = $"0g / {(targetCalories * 0.5 / 4):F0}g";
-            FatsText.Text = $"0g / {(targetCalories * 0.25 / 9):F0}g";
+            UpdateDashboardValues(); 
         }
 
         private void Profile_Click(object sender, RoutedEventArgs e)
@@ -62,7 +63,7 @@ namespace MacroMeter
 
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
-         
+       
         }
 
         private void Logout_Click(object sender, RoutedEventArgs e)
@@ -70,39 +71,57 @@ namespace MacroMeter
             new LoginWindow().Show();
             this.Close();
         }
+
         private void SaveFood_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(FoodNameInput.Text) ||
-                !double.TryParse(CaloriesInput.Text, out double zadaneKalorie))
+            bool isKcalOk = double.TryParse(CaloriesInput.Text, out double zadaneKcal);
+            bool isProtOk = double.TryParse(ProteinsInput.Text, out double zadaneProt);
+            bool isCarbOk = double.TryParse(CarbsInput.Text, out double zadaneCarb);
+            bool isFatOk = double.TryParse(FatsInput.Text, out double zadaneFat);
+
+            if (string.IsNullOrWhiteSpace(FoodNameInput.Text) || !isKcalOk)
             {
-                MessageBox.Show("Zadajte platné údaje o jedle.");
+                MessageBox.Show("Zadajte aspoň názov jedla a kalórie.");
                 return;
             }
 
-            eatenToday += zadaneKalorie;
+            eatenCalories += zadaneKcal;
+            eatenProteins += isProtOk ? zadaneProt : 0;
+            eatenCarbs += isCarbOk ? zadaneCarb : 0;
+            eatenFats += isFatOk ? zadaneFat : 0;
+
             UpdateDashboardValues();
 
             FoodNameInput.Clear();
             AmountInput.Clear();
             CaloriesInput.Clear();
+            ProteinsInput.Clear();
+            CarbsInput.Clear();
+            FatsInput.Clear();
 
             MessageBox.Show("Jedlo pridané!");
-            SearchFood_Click(sender, e); 
+            SearchFood_Click(sender, e);
         }
 
         private void UpdateDashboardValues()
         {
+            double targetCalories = CalculateCalories();
+            double targetProteins = _user.Vaha * 1.8; 
+            double targetCarbs = (targetCalories * 0.5) / 4;
+            double targetFats = (targetCalories * 0.25) / 9;         
             double bmi = CalculateBMI(_user.Vaha, _user.Vyska);
             BMIText.Text = $"{bmi:F1}";
 
-            double targetCalories = CalculateCalories();
-            double remaining = targetCalories - eatenToday;
-
-            CaloriesText.Text = $"{eatenToday:F0} / {targetCalories:F0} kcal";
+            double remaining = targetCalories - eatenCalories;
+            CaloriesText.Text = $"{eatenCalories:F0} / {targetCalories:F0} kcal";
             RemainingCaloriesText.Text = remaining > 0 ? $"Zostáva {remaining:F0} kcal" : "Cieľ splnený!";
 
             WeightText.Text = $"{_user.Vaha} kg";
             TargetWeightText.Text = $"{_user.CielovaVaha} kg";
+        
+            ProteinsText.Text = $"{eatenProteins:F0}g / {targetProteins:F0}g";
+            CarbsText.Text = $"{eatenCarbs:F0}g / {targetCarbs:F0}g";
+            FatsText.Text = $"{eatenFats:F0}g / {targetFats:F0}g";
         }
 
         private double CalculateBMI(double weight, int height)
