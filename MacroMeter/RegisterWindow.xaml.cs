@@ -23,7 +23,7 @@ namespace MacroMeter
             {
                 MessageBox.Show("Heslá nesedia");
                 return;
-            }         
+            }
             User user = new User
             {
                 Meno = MenoBox.Text.Trim(),
@@ -50,6 +50,14 @@ namespace MacroMeter
         private void EmailBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
 
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            LoginWindow login = new LoginWindow();
+
+            login.Show();
+            this.Close();
         }
     }
 }

@@ -21,8 +21,6 @@ namespace MacroMeter
         {
             WeightText.Text = $"Aktuálna váha: {_user.Vaha} kg";
 
-            GoalWeightText.Text = $"Cieľová váha: {_user.CielovaVaha} kg";
-
             double bmi = CalculateBMI(_user.Vaha, _user.Vyska);
 
             BMIText.Text = $"BMI: {bmi:F1} ({GetBMICategory(bmi)})";
