@@ -65,7 +65,7 @@ namespace MacroMeter
 
                 Database.SaveUser(_user);
 
-                MessageBox.Show("OK ide to");
+                MessageBox.Show("ide to");
 
                 new MainWindow(_user).Show();
                 Close();
