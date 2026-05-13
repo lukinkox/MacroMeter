@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Media;
 
 namespace MacroMeter
 {
@@ -9,55 +12,53 @@ namespace MacroMeter
             InitializeComponent();
         }
 
-        private void Register_Click(object sender, RoutedEventArgs e)
+        private async void Register_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(MenoBox.Text) ||
-                string.IsNullOrWhiteSpace(PriezviskoBox.Text) ||
-                string.IsNullOrWhiteSpace(EmailBox.Text))
+            if (string.IsNullOrWhiteSpace(MenoBox.Text) || string.IsNullOrWhiteSpace(EmailBox.Text) || string.IsNullOrWhiteSpace(PassBox.Password))
             {
-                MessageBox.Show("Vyplň všetko");
+                MessageBox.Show("Prosím, vyplňte všetky povinné údaje.", "Chyba", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            if (PassBox.Password != ConfirmBox.Password)
+            User newUser = new User
             {
-                MessageBox.Show("Heslá nesedia");
-                return;
-            }
-            User user = new User
-            {
-                Meno = MenoBox.Text.Trim(),
-                Priezvisko = PriezviskoBox.Text.Trim(),
-                Email = EmailBox.Text.Trim(),
-                Password = PassBox.Password,
-
-                Vaha = 0,
-                CielovaVaha = 0,
-                Vek = 0,
-                Vyska = 0,
-                Pohlavie = "",
-                Aktivita = "",
-                Ciel = ""
+                Meno = MenoBox.Text,
+                Priezvisko = PriezviskoBox.Text,
+                Email = EmailBox.Text,
+                Password = PassBox.Password
             };
 
+            LoadingWindow setupLoading = new LoadingWindow();
+            setupLoading.StatusText.Text = "Vytváram váš profil...";
+            setupLoading.LoadingBar.Foreground = new SolidColorBrush(Colors.MediumSeaGreen);
+            setupLoading.Show();
 
-            MessageBox.Show("Registrácia úspešná");
+            this.Close();
 
-            new SetupWindow(user).Show();
-            Close();
-        }
+            for (int i = 0; i <= 100; i++)
+            {
+                await Task.Delay(15);
+                setupLoading.LoadingBar.Value = i;
+                setupLoading.PercentText.Text = i + "%";
 
-        private void EmailBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
+                if (i == 50) setupLoading.StatusText.Text = "Pripravujem dotazník...";
+            }
 
+            SetupWindow setup = new SetupWindow(newUser);
+            setup.Show();
+            setupLoading.Close();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             LoginWindow login = new LoginWindow();
-
             login.Show();
             this.Close();
+        }
+
+        private void EmailBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+          
         }
     }
 }

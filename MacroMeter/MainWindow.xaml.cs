@@ -7,6 +7,7 @@ namespace MacroMeter
     public partial class MainWindow : Window
     {
         private User _user;
+        private double eatenToday = 0;
 
         public MainWindow(User user)
         {
@@ -14,10 +15,8 @@ namespace MacroMeter
             _user = user;
 
             WelcomeText.Text = $"Vitaj, {_user.Meno}! 👋";
-
             UpdateDashboardValues();
         }
-
         private void HideAllSections()
         {
             DashboardSection.Visibility = Visibility.Collapsed;
@@ -42,14 +41,9 @@ namespace MacroMeter
         {
             HideAllSections();
             DailyIntakeSection.Visibility = Visibility.Visible;
-       
             double targetCalories = CalculateCalories();
-
-            // Bielkoviny: 1.8g na kg váhy
             ProteinsText.Text = $"0g / {(_user.Vaha * 1.8):F0}g";
-            // Sacharidy: cca 50% kalórií (1g = 4 kcal)
             CarbsText.Text = $"0g / {(targetCalories * 0.5 / 4):F0}g";
-            // Tuky: cca 25% kalórií (1g = 9 kcal)
             FatsText.Text = $"0g / {(targetCalories * 0.25 / 9):F0}g";
         }
 
@@ -68,13 +62,32 @@ namespace MacroMeter
 
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
-            new SettingsWindow().ShowDialog();
+         
         }
 
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
             new LoginWindow().Show();
             this.Close();
+        }
+        private void SaveFood_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(FoodNameInput.Text) ||
+                !double.TryParse(CaloriesInput.Text, out double zadaneKalorie))
+            {
+                MessageBox.Show("Zadajte platné údaje o jedle.");
+                return;
+            }
+
+            eatenToday += zadaneKalorie;
+            UpdateDashboardValues();
+
+            FoodNameInput.Clear();
+            AmountInput.Clear();
+            CaloriesInput.Clear();
+
+            MessageBox.Show("Jedlo pridané!");
+            SearchFood_Click(sender, e); 
         }
 
         private void UpdateDashboardValues()
@@ -83,11 +96,10 @@ namespace MacroMeter
             BMIText.Text = $"{bmi:F1}";
 
             double targetCalories = CalculateCalories();
-            double eatenToday = 0;
             double remaining = targetCalories - eatenToday;
 
             CaloriesText.Text = $"{eatenToday:F0} / {targetCalories:F0} kcal";
-            RemainingCaloriesText.Text = $"Zostáva doplniť {remaining:F0} kcal";
+            RemainingCaloriesText.Text = remaining > 0 ? $"Zostáva {remaining:F0} kcal" : "Cieľ splnený!";
 
             WeightText.Text = $"{_user.Vaha} kg";
             TargetWeightText.Text = $"{_user.CielovaVaha} kg";
@@ -101,15 +113,9 @@ namespace MacroMeter
 
         private double CalculateCalories()
         {
-            double bmr;
-            if (_user.Pohlavie == "Muž")
-            {
-                bmr = (10 * _user.Vaha) + (6.25 * _user.Vyska) - (5 * _user.Vek) + 5;
-            }
-            else
-            {
-                bmr = (10 * _user.Vaha) + (6.25 * _user.Vyska) - (5 * _user.Vek) - 161;
-            }
+            double bmr = (_user.Pohlavie == "Muž")
+                ? (10 * _user.Vaha) + (6.25 * _user.Vyska) - (5 * _user.Vek) + 5
+                : (10 * _user.Vaha) + (6.25 * _user.Vyska) - (5 * _user.Vek) - 161;
 
             double multiplier = _user.Aktivita switch
             {

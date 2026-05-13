@@ -154,22 +154,18 @@
                     </Border>
                 </StackPanel>
             </ScrollViewer>
-
             <ScrollViewer x:Name="AddFoodSection" Visibility="Collapsed" VerticalScrollBarVisibility="Auto">
                 <StackPanel Margin="30">
                     <TextBlock Text="➕ Pridať nové jedlo" FontSize="28" FontWeight="Bold" Foreground="#2C3E50" Margin="10,0,0,25"/>
                     <Border Style="{StaticResource DashboardCard}">
                         <StackPanel>
                             <TextBlock Text="Názov jedla" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                            <TextBox Height="35" Margin="0,0,0,15" Padding="5,5"/>
-
+                            <TextBox x:Name="FoodNameInput" Height="35" Margin="0,0,0,15" Padding="5,5"/>
                             <TextBlock Text="Množstvo (g / ml)" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                            <TextBox Height="35" Margin="0,0,0,15" Padding="5,5"/>
-
+                            <TextBox x:Name="AmountInput" Height="35" Margin="0,0,0,15" Padding="5,5"/>
                             <TextBlock Text="Kalórie (kcal)" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                            <TextBox Height="35" Margin="0,0,0,25" Padding="5,5"/>
-
-                            <Button Content="ULOŽIŤ JEDLO" Height="45" Background="#27AE60" Foreground="White" FontWeight="Bold"/>
+                            <TextBox x:Name="CaloriesInput" Height="35" Margin="0,0,0,25" Padding="5,5"/>
+                            <Button Content="ULOŽIŤ JEDLO" Click="SaveFood_Click" Height="45" Background="#27AE60" Foreground="White" FontWeight="Bold"/>
                         </StackPanel>
                     </Border>
                 </StackPanel>
