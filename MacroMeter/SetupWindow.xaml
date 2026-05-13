@@ -1,60 +1,115 @@
 ﻿<Window x:Class="MacroMeter.SetupWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Setup"
-        Height="600"
-        Width="420"
-        WindowStartupLocation="CenterScreen">
+        Title="MacroMeter - Nastavenie profilu"
+        Height="700" Width="450"
+        WindowStartupLocation="CenterScreen"
+        Background="#F0F2F5"
+        FontFamily="Segoe UI">
 
-    <ScrollViewer>
-        <StackPanel Margin="25">
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#F0F2F5" Offset="0"/>
+                <GradientStop Color="#DCE1E8" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
 
-            <TextBlock Text="Setup"
-                       FontSize="28"
-                       FontWeight="SemiBold"
-                       Margin="0,0,0,20"/>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="30">
 
-            <TextBlock Text="Pohlavie"/>
-            <ComboBox x:Name="GenderBox" Height="30">
-                <ComboBoxItem Content="Muž"/>
-                <ComboBoxItem Content="Žena"/>
-            </ComboBox>
+                <TextBlock Text="Osobný profil"
+                           FontSize="28"
+                           FontWeight="Bold"
+                           Foreground="#2C3E50"
+                           Margin="0,0,0,5"/>
 
-            <TextBlock Text="Vek" Margin="0,10,0,0"/>
-            <TextBox x:Name="AgeBox" Height="30"/>
+                <TextBlock Text="Nastavte si svoje parametre pre presný výpočet."
+                           FontSize="13"
+                           Foreground="#7F8C8D"
+                           Margin="0,0,0,25"/>
 
-            <TextBlock Text="Aktuálna váha (kg)" Margin="0,10,0,0"/>
-            <TextBox x:Name="CurrentWeightBox" Height="30"/>
+                <Border Background="White" CornerRadius="15" Padding="25">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.05"/>
+                    </Border.Effect>
 
-            <TextBlock Text="Cieľová váha (kg)" Margin="0,10,0,0"/>
-            <TextBox x:Name="GoalWeightBox" Height="30"/>
+                    <StackPanel>
+                        <TextBlock Text="Pohlavie" Foreground="#34495E" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                        <Border BorderBrush="#DCE1E8" BorderThickness="1" CornerRadius="8" Margin="0,0,0,15">
+                            <ComboBox x:Name="GenderBox" Height="35" BorderThickness="0" Background="Transparent" VerticalContentAlignment="Center" Padding="10,0">
+                                <ComboBoxItem Content="Muž"/>
+                                <ComboBoxItem Content="Žena"/>
+                            </ComboBox>
+                        </Border>
 
-            <TextBlock Text="Výška(cm)" Margin="0,10,0,0"/>
-            <TextBox x:Name="HeightBox" Height="30"/>
+                        <TextBlock Text="Vek" Foreground="#34495E" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                        <Border BorderBrush="#DCE1E8" BorderThickness="1" CornerRadius="8" Margin="0,0,0,15">
+                            <TextBox x:Name="AgeBox" Height="35" BorderThickness="0" Background="Transparent" VerticalContentAlignment="Center" Padding="10,0"/>
+                        </Border>
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-            <TextBlock Text="Aktivita" Margin="0,10,0,0"/>
-            <ComboBox x:Name="ActivityBox" Height="30">
-                <ComboBoxItem Content="Sedavý"/>
-                <ComboBoxItem Content="Aktívny"/>
-                <ComboBoxItem Content="Veľmi aktívny"/>
-            </ComboBox>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Aktuálna váha (kg)" Foreground="#34495E" FontWeight="SemiBold" Margin="0,0,0,5" FontSize="11"/>
+                                <Border BorderBrush="#DCE1E8" BorderThickness="1" CornerRadius="8">
+                                    <TextBox x:Name="CurrentWeightBox" Height="35" BorderThickness="0" Background="Transparent" VerticalContentAlignment="Center" Padding="10,0"/>
+                                </Border>
+                            </StackPanel>
 
-            <TextBlock Text="Cieľ" Margin="0,10,0,0"/>
-            <ComboBox x:Name="GoalBox" Height="30">
-                <ComboBoxItem Content="Schudnúť"/>
-                <ComboBoxItem Content="Udržať"/>
-                <ComboBoxItem Content="Pribrať"/>
-            </ComboBox>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Cieľová váha (kg)" Foreground="#34495E" FontWeight="SemiBold" Margin="0,0,0,5" FontSize="11"/>
+                                <Border BorderBrush="#DCE1E8" BorderThickness="1" CornerRadius="8">
+                                    <TextBox x:Name="GoalWeightBox" Height="35" BorderThickness="0" Background="Transparent" VerticalContentAlignment="Center" Padding="10,0"/>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
 
-            <Button Content="Registrovať sa"
-                    Height="40"
-                    Background="Green"
-                    Foreground="White"
-                    Margin="0,20,0,0"
-                    Click="Save_Click">
-            </Button>
+                        <TextBlock Text="Výška (cm)" Foreground="#34495E" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                        <Border BorderBrush="#DCE1E8" BorderThickness="1" CornerRadius="8" Margin="0,0,0,15">
+                            <TextBox x:Name="HeightBox" Height="35" BorderThickness="0" Background="Transparent" VerticalContentAlignment="Center" Padding="10,0"/>
+                        </Border>
 
-        </StackPanel>
-    </ScrollViewer>
+                        <TextBlock Text="Úroveň aktivity" Foreground="#34495E" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                        <Border BorderBrush="#DCE1E8" BorderThickness="1" CornerRadius="8" Margin="0,0,0,15">
+                            <ComboBox x:Name="ActivityBox" Height="35" BorderThickness="0" Background="Transparent" VerticalContentAlignment="Center" Padding="10,0">
+                                <ComboBoxItem Content="Sedavý"/>
+                                <ComboBoxItem Content="Aktívny"/>
+                                <ComboBoxItem Content="Veľmi aktívny"/>
+                            </ComboBox>
+                        </Border>
 
+                        <TextBlock Text="Váš cieľ" Foreground="#34495E" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                        <Border BorderBrush="#DCE1E8" BorderThickness="1" CornerRadius="8" Margin="0,0,0,25">
+                            <ComboBox x:Name="GoalBox" Height="35" BorderThickness="0" Background="Transparent" VerticalContentAlignment="Center" Padding="10,0">
+                                <ComboBoxItem Content="Schudnúť"/>
+                                <ComboBoxItem Content="Udržať váhu"/>
+                                <ComboBoxItem Content="Pribrať svaly"/>
+                            </ComboBox>
+                        </Border>
+
+                        <Button Content="DOKONČIŤ REGISTRÁCIU"
+                                Height="45"
+                                Background="#2C3E50"
+                                Foreground="White"
+                                FontWeight="Bold"
+                                Cursor="Hand"
+                                Click="Save_Click">
+                            <Button.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="10"/>
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+                    </StackPanel>
+                </Border>
+
+                <TextBlock Text="Krok 2 z 2" Foreground="#BDC3C7" HorizontalAlignment="Center" Margin="0,20,0,0" FontSize="12"/>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
 </Window>
