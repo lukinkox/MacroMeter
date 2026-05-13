@@ -98,13 +98,37 @@
                         </StackPanel>
                     </Border>
 
-                    <Border Style="{StaticResource DashboardCard}">
-                        <StackPanel>
-                            <TextBlock Text="Cieľová váha" Foreground="#95A5A6" FontSize="14"/>
-                            <TextBlock x:Name="GoalWeightText" Text="75.0 kg" FontSize="24" FontWeight="Bold" Margin="0,5"/>
-                            <ProgressBar Value="80" Height="8" Margin="0,10,0,0" Foreground="#3498DB" Background="#ECF0F1"/>
-                        </StackPanel>
-                    </Border>
+        <Button Content="🔍 Vyhľadať jedlo"
+            Height="50"
+            Margin="0,5"
+            Click="SearchFood_Click"/>
+
+        <Button Content="📊 Denný príjem"
+            Height="50"
+            Margin="0,5"
+            Click="DailyIntake_Click"/>
+
+        <Button Content="➕ Pridať vlastné jedlo"
+            Height="50"
+            Margin="0,5"
+            Click="AddFood_Click"/>
+
+        <Button Content="👤 Profil používateľa"
+            Height="50"
+            Margin="0,5"
+            Click="Profile_Click"/>
+
+        <Button Content="⚙️ Nastavenia"
+            Height="50"
+            Margin="0,5"
+            Click="Settings_Click"/>
+
+        <Button Content="🚪 Odhlásiť sa"
+            Height="50"
+            Margin="0,20,0,0"
+            Background="Red"
+            Foreground="White"
+            Click="Logout_Click"/>
 
                     <Border Style="{StaticResource DashboardCard}">
                         <StackPanel>

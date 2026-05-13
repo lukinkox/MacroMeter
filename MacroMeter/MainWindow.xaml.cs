@@ -52,6 +52,7 @@ namespace MacroMeter
 
             return "Obezita";
         }
+
         private double CalculateCalories()
         {
             double bmr;
@@ -91,22 +92,41 @@ namespace MacroMeter
 
         private void SearchFood_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Vyhľadávanie jedla");
+            new FoodSearchWindow().ShowDialog();
         }
 
         private void DailyIntake_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Denný príjem");
+            string info =
+                $"Denný prehľad:\n\n" +
+                $"Váha: {_user.Vaha} kg\n" +
+                $"BMI: {CalculateBMI(_user.Vaha, _user.Vyska):F1}\n" +
+                $"Odporúčané kalórie: {CalculateCalories():F0} kcal";
+
+            MessageBox.Show(info, "Denný príjem");
         }
 
         private void AddFood_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Pridanie jedla");
+            new AddFoodWindow().ShowDialog();
+        }
+
+        private void Profile_Click(object sender, RoutedEventArgs e)
+        {
+            string profile =
+                $"Meno: {_user.Meno}\n" +
+                $"Priezvisko: {_user.Priezvisko}\n" +
+                $"Email: {_user.Email}\n" +
+                $"Vek: {_user.Vek}\n" +
+                $"Výška: {_user.Vyska} cm\n" +
+                $"Váha: {_user.Vaha} kg";
+
+            MessageBox.Show(profile, "Profil používateľa 👤");
         }
 
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Nastavenia");
+            new SettingsWindow().ShowDialog();
         }
 
         private void Logout_Click(object sender, RoutedEventArgs e)
@@ -115,9 +135,5 @@ namespace MacroMeter
             Close();
         }
 
-        private void Profile_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Profil používateľa");
-        }
     }
 }
