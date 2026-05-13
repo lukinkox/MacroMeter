@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace MacroMeter
 {
@@ -17,18 +18,16 @@ namespace MacroMeter
             UpdateDashboardValues();
         }
 
-
-
         private void HideAllSections()
         {
             DashboardSection.Visibility = Visibility.Collapsed;
             AddFoodSection.Visibility = Visibility.Collapsed;
-
+            DailyIntakeSection.Visibility = Visibility.Collapsed;
+            ProfileSection.Visibility = Visibility.Collapsed;
         }
 
         private void SearchFood_Click(object sender, RoutedEventArgs e)
         {
-
             HideAllSections();
             DashboardSection.Visibility = Visibility.Visible;
         }
@@ -41,21 +40,32 @@ namespace MacroMeter
 
         private void DailyIntake_Click(object sender, RoutedEventArgs e)
         {
-            double calories = CalculateCalories();
-            MessageBox.Show($"Tvoj odporúčaný denný príjem je: {calories:F0} kcal", "Denný príjem");
+            HideAllSections();
+            DailyIntakeSection.Visibility = Visibility.Visible;
+
+            // Výpočet cieľových makroživín (orientačné hodnoty)
+            double targetCalories = CalculateCalories();
+
+            // Bielkoviny: 1.8g na kg váhy
+            ProteinsText.Text = $"0g / {(_user.Vaha * 1.8):F0}g";
+            // Sacharidy: cca 50% kalórií (1g = 4 kcal)
+            CarbsText.Text = $"0g / {(targetCalories * 0.5 / 4):F0}g";
+            // Tuky: cca 25% kalórií (1g = 9 kcal)
+            FatsText.Text = $"0g / {(targetCalories * 0.25 / 9):F0}g";
         }
 
         private void Profile_Click(object sender, RoutedEventArgs e)
         {
-            string profile =
-                $"Meno: {_user.Meno}\n" +
-                $"Priezvisko: {_user.Priezvisko}\n" +
-                $"Email: {_user.Email}\n" +
-                $"Vek: {_user.Vek}\n" +
-                $"Výška: {_user.Vyska} cm\n" +
-                $"Váha: {_user.Vaha} kg";
+            HideAllSections();
+            ProfileSection.Visibility = Visibility.Visible;
 
-            MessageBox.Show(profile, "Profil používateľa 👤");
+            // Naplnenie údajov v sekcii profilu
+            ProfileFullName.Text = $"{_user.Meno} {_user.Priezvisko}";
+            ProfileEmail.Text = _user.Email;
+            ProfileAge.Text = $"{_user.Vek} rokov";
+            ProfileHeight.Text = $"{_user.Vyska} cm";
+            ProfileActivity.Text = _user.Aktivita;
+            ProfileGoal.Text = _user.Ciel;
         }
 
         private void Settings_Click(object sender, RoutedEventArgs e)
@@ -71,18 +81,18 @@ namespace MacroMeter
 
         private void UpdateDashboardValues()
         {
-
             double bmi = CalculateBMI(_user.Vaha, _user.Vyska);
             BMIText.Text = $"{bmi:F1}";
+
             double targetCalories = CalculateCalories();
             double eatenToday = 0;
             double remaining = targetCalories - eatenToday;
 
             CaloriesText.Text = $"{eatenToday:F0} / {targetCalories:F0} kcal";
             RemainingCaloriesText.Text = $"Zostáva doplniť {remaining:F0} kcal";
+
             WeightText.Text = $"{_user.Vaha} kg";
             TargetWeightText.Text = $"{_user.CielovaVaha} kg";
-
         }
 
         private double CalculateBMI(double weight, int height)
