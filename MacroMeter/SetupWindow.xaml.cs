@@ -1,26 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Reflection;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Media.Media3D;
-using System.Windows.Shapes;
-using System.Xml.Schema;
 
 namespace MacroMeter
 {
     public partial class SetupWindow : Window
     {
         private User _user;
-        private int vaha;
-        private int cielovaVaha;
 
         public SetupWindow(User user)
         {
@@ -33,9 +19,11 @@ namespace MacroMeter
             try
             {
                 if (!int.TryParse(AgeBox.Text, out int vek) ||
-                    !int.TryParse(HeightBox.Text, out int vyska))
+                    !int.TryParse(HeightBox.Text, out int vyska) ||
+                    !double.TryParse(CurrentWeightBox.Text, out double aktualnaVaha) ||
+                    !double.TryParse(GoalWeightBox.Text, out double cielovaVaha))
                 {
-                    MessageBox.Show("Zlé čísla");
+                    MessageBox.Show("Zadajte prosím platné číselné údaje pre vek, výšku a váhu.");
                     return;
                 }
 
@@ -43,36 +31,39 @@ namespace MacroMeter
                     ActivityBox.SelectedItem == null ||
                     GoalBox.SelectedItem == null)
                 {
-                    MessageBox.Show("Niečo si nevybral");
+                    MessageBox.Show("Prosím, vyplňte všetky výbery (pohlavie, aktivita a cieľ).");
                     return;
                 }
 
+
                 _user.Vek = vek;
                 _user.Vyska = vyska;
+                _user.Vaha = aktualnaVaha;
+                _user.CielovaVaha = cielovaVaha;
 
                 _user.Pohlavie = (GenderBox.SelectedItem as ComboBoxItem)?.Content.ToString();
                 _user.Aktivita = (ActivityBox.SelectedItem as ComboBoxItem)?.Content.ToString();
                 _user.Ciel = (GoalBox.SelectedItem as ComboBoxItem)?.Content.ToString();
 
-                _user.Vaha = double.TryParse(CurrentWeightBox.Text, out double v) ? v : 0;
-                _user.CielovaVaha = double.TryParse(GoalWeightBox.Text, out double c) ? c : 0;
-
+  
                 if (Database.UserExists(_user.Email))
                 {
-                    MessageBox.Show("Tento email už existuje v databáze");
+                    MessageBox.Show("Používateľ s týmto emailom už existuje!");
                     return;
                 }
 
                 Database.SaveUser(_user);
 
-                MessageBox.Show("ide to");
+                MessageBox.Show("Profil bol úspešne vytvorený!", "Úspech", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                new MainWindow(_user).Show();
-                Close();
+                MainWindow mainDash = new MainWindow(_user);
+                mainDash.Show();
+
+                this.Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message); 
+                MessageBox.Show("Vyskytla sa chyba: " + ex.Message, "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

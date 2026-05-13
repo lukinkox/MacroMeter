@@ -113,14 +113,14 @@
                             <StackPanel>
                                 <TextBlock Text="Kalórie dnes" Foreground="#95A5A6" FontSize="14"/>
                                 <TextBlock x:Name="CaloriesText" Text="1850 / 2200 kcal" FontSize="22" FontWeight="Bold" Margin="0,5" Foreground="#2C3E50"/>
-                                <TextBlock Text="Zostáva doplniť 350 kcal" FontSize="12" Foreground="#E67E22" FontWeight="Medium"/>
+                                <TextBlock x:Name="RemainingCaloriesText" Text="Zostáva doplniť 0 kcal" FontSize="12" Foreground="#E67E22" FontWeight="Medium"/>
                             </StackPanel>
                         </Border>
 
                         <Border Style="{StaticResource DashboardCard}">
                             <StackPanel>
                                 <TextBlock Text="Cieľová váha" Foreground="#95A5A6" FontSize="14"/>
-                                <TextBlock Text="75.0 kg" FontSize="26" FontWeight="Bold" Margin="0,5" Foreground="#2C3E50"/>
+                                <TextBlock x:Name="TargetWeightText" Text="0.0 kg" FontSize="26" FontWeight="Bold" Margin="0,5" Foreground="#2C3E50"/>
                                 <ProgressBar Value="70" Height="8" Margin="0,5" Background="#ECF0F1" Foreground="#3498DB"/>
                             </StackPanel>
                         </Border>
@@ -138,6 +138,7 @@
                 </StackPanel>
             </ScrollViewer>
 
+            <!-- SEKCIA 2: PRIDAŤ JEDLO -->
             <ScrollViewer x:Name="AddFoodSection" Visibility="Collapsed" VerticalScrollBarVisibility="Auto">
                 <StackPanel Margin="30">
                     <TextBlock Text="➕ Pridať nové jedlo" FontSize="28" FontWeight="Bold" Foreground="#2C3E50" Margin="10,0,0,25"/>

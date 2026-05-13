@@ -73,12 +73,16 @@ namespace MacroMeter
         {
 
             double bmi = CalculateBMI(_user.Vaha, _user.Vyska);
-            BMIText.Text = $"{bmi:F1}"; 
+            BMIText.Text = $"{bmi:F1}";
+            double targetCalories = CalculateCalories();
+            double eatenToday = 0;
+            double remaining = targetCalories - eatenToday;
 
-            double calories = CalculateCalories();
-            CaloriesText.Text = $"0 / {calories:F0} kcal";
-
+            CaloriesText.Text = $"{eatenToday:F0} / {targetCalories:F0} kcal";
+            RemainingCaloriesText.Text = $"Zostáva doplniť {remaining:F0} kcal";
             WeightText.Text = $"{_user.Vaha} kg";
+            TargetWeightText.Text = $"{_user.CielovaVaha} kg";
+
         }
 
         private double CalculateBMI(double weight, int height)
