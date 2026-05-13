@@ -42,8 +42,7 @@ namespace MacroMeter
         {
             HideAllSections();
             DailyIntakeSection.Visibility = Visibility.Visible;
-
-            // Výpočet cieľových makroživín (orientačné hodnoty)
+       
             double targetCalories = CalculateCalories();
 
             // Bielkoviny: 1.8g na kg váhy
@@ -59,7 +58,6 @@ namespace MacroMeter
             HideAllSections();
             ProfileSection.Visibility = Visibility.Visible;
 
-            // Naplnenie údajov v sekcii profilu
             ProfileFullName.Text = $"{_user.Meno} {_user.Priezvisko}";
             ProfileEmail.Text = _user.Email;
             ProfileAge.Text = $"{_user.Vek} rokov";
