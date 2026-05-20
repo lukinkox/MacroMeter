@@ -56,6 +56,10 @@ namespace MacroMeter
             this.Close();
         }
 
+        private void CloseWindow_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
         private void EmailBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
           

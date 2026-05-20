@@ -6,10 +6,9 @@
         WindowStartupLocation="CenterScreen"
         Background="#F0F2F5"
         FontFamily="Segoe UI"
-                WindowState="Maximized"
+        WindowState="Maximized"
         WindowStyle="None"
         ResizeMode="NoResize">
-
     <Grid>
         <Grid.Background>
             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -18,9 +17,30 @@
             </LinearGradientBrush>
         </Grid.Background>
 
+        <Button Content="✕" 
+                HorizontalAlignment="Right" 
+                VerticalAlignment="Top" 
+                Width="40" 
+                Height="40" 
+                Background="Transparent" 
+                Foreground="#2C3E50" 
+                FontSize="20" 
+                FontWeight="Bold" 
+                BorderThickness="0" 
+                Click="CloseWindow_Click">
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Foreground" Value="#E74C3C"/>
+                            <Setter Property="Cursor" Value="Hand"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="320">
-
-
             <Border Background="#2C3E50" CornerRadius="15" Padding="20" Margin="0,0,0,30">
                 <Border.Effect>
                     <DropShadowEffect BlurRadius="15" ShadowDepth="2" Opacity="0.2"/>
@@ -29,9 +49,8 @@
                            FontSize="24" 
                            FontWeight="Bold" 
                            Foreground="White" 
-                           HorizontalAlignment="Center" 
-                        
-            ></TextBlock></Border>
+                           HorizontalAlignment="Center"/>
+            </Border>
 
             <Border Background="White" CornerRadius="15" Padding="25">
                 <Border.Effect>
@@ -39,16 +58,18 @@
                 </Border.Effect>
 
                 <StackPanel>
-                   <TextBlock Text="Vitajte späť!" FontSize="20" FontWeight="SemiBold" Foreground="#2C3E50" Margin="0,0,0,20" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Vitajte späť!" FontSize="20" FontWeight="SemiBold" Foreground="#2C3E50" Margin="0,0,0,20" HorizontalAlignment="Center"/>
 
                     <TextBlock Text="Email" Foreground="#7F8C8D" FontSize="12" Margin="0,0,0,5" FontWeight="Medium"/>
                     <Border BorderBrush="#DCE1E8" BorderThickness="1" CornerRadius="8" Margin="0,0,0,15">
                         <TextBox x:Name="EmailBox" Background="Transparent" BorderThickness="0" Padding="10,8" FontSize="14"/>
                     </Border>
+
                     <TextBlock Text="Heslo" Foreground="#7F8C8D" FontSize="12" Margin="0,0,0,5" FontWeight="Medium"/>
                     <Border BorderBrush="#DCE1E8" BorderThickness="1" CornerRadius="8" Margin="0,0,0,20">
                         <PasswordBox x:Name="PassBox" Background="Transparent" BorderThickness="0" Padding="10,8" FontSize="14"/>
                     </Border>
+
                     <Button Content="Prihlásiť sa" 
                             Height="42" 
                             Background="#2C3E50" 
@@ -62,6 +83,7 @@
                             </Style>
                         </Button.Resources>
                     </Button>
+
                     <Button Content="Registrovať sa" 
                             Height="40" 
                             Background="Transparent" 

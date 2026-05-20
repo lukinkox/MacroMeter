@@ -278,6 +278,28 @@
                     </Border>
                 </StackPanel>
             </ScrollViewer>
+            <Button Content="✕" 
+        HorizontalAlignment="Right" 
+        VerticalAlignment="Top" 
+        Width="40" 
+        Height="40" 
+        Background="Transparent" 
+        Foreground="#2C3E50" 
+        FontSize="20" 
+        FontWeight="Bold" 
+        BorderThickness="0" 
+        Click="CloseWindow_Click">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="#E74C3C"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
 
         </Grid>
     </Grid>

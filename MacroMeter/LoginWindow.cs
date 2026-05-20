@@ -10,7 +10,10 @@ namespace MacroMeter
             Database.Initialize();
 
         }
-
+        private void CloseWindow_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }   
         private void Login_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(EmailBox.Text) ||
