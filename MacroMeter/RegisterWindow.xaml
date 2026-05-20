@@ -5,7 +5,10 @@
         Height="650" Width="420"
         WindowStartupLocation="CenterScreen"
         Background="#F0F2F5"
-        FontFamily="Segoe UI">
+        FontFamily="Segoe UI"
+                WindowState="Maximized"
+        WindowStyle="None"
+        ResizeMode="NoResize">
 
     <Grid>
         <Grid.Background>
