@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -23,12 +25,24 @@ namespace MacroMeter
 
         private List<WeightRecord> weightHistory = new List<WeightRecord>();
 
+        // GLOBÁLNA SPOLOČNÁ DATABÁZA JEDÁL (Hodnoty prísne na 100g)
+        private ObservableCollection<FoodEntry> CentralnaDatabazaJedal = new ObservableCollection<FoodEntry>();
+
         public MainWindow(User user)
         {
             InitializeComponent();
             _user = user;
 
             WelcomeText.Text = $"Vitaj, {_user.Meno}! 👋";
+
+            // Predvolené jedlá pri štarte aplikácie (všetky na 100g)
+            CentralnaDatabazaJedal.Add(new FoodEntry { Nazov = "Kuracie prsia raw", Kalorie = 120, Bielkoviny = 23, Sacharidy = 0, Tuky = 2.6 });
+            CentralnaDatabazaJedal.Add(new FoodEntry { Nazov = "Ryža Basmati raw", Kalorie = 350, Bielkoviny = 7.5, Sacharidy = 78, Tuky = 0.6 });
+            CentralnaDatabazaJedal.Add(new FoodEntry { Nazov = "Vajíčko celé (ks)", Kalorie = 143, Bielkoviny = 12.6, Sacharidy = 0.7, Tuky = 9.5 });
+            CentralnaDatabazaJedal.Add(new FoodEntry { Nazov = "Banán", Kalorie = 89, Bielkoviny = 1.1, Sacharidy = 23, Tuky = 0.3 });
+
+            // Priradenie k ListBoxu v UI
+            DatabaseListBox.ItemsSource = CentralnaDatabazaJedal;
 
             weightHistory.Add(new WeightRecord { Date = DateTime.Now.AddDays(-15), Weight = _user.Vaha + 2.5 });
             weightHistory.Add(new WeightRecord { Date = DateTime.Now.AddDays(-10), Weight = _user.Vaha + 1.8 });
@@ -45,6 +59,7 @@ namespace MacroMeter
             AddFoodSection.Visibility = Visibility.Collapsed;
             DailyIntakeSection.Visibility = Visibility.Collapsed;
             ProfileSection.Visibility = Visibility.Collapsed;
+            ZapisatPrijemSection.Visibility = Visibility.Collapsed; // Skrytie novej sekcie
         }
 
         private void SearchFood_Click(object sender, RoutedEventArgs e)
@@ -58,6 +73,18 @@ namespace MacroMeter
         {
             HideAllSections();
             AddFoodSection.Visibility = Visibility.Visible;
+        }
+
+        // Otvorenie novej sekcie pre zápis príjmu jedál
+        private void ZapisatPrijemMenu_Click(object sender, RoutedEventArgs e)
+        {
+            HideAllSections();
+            ZapisatPrijemSection.Visibility = Visibility.Visible;
+            
+            // Reset textových polí
+            FoodSearchBox.Text = "";
+            GramazInput.Text = "";
+            DatabaseListBox.ItemsSource = CentralnaDatabazaJedal;
         }
 
         private void DailyIntake_Click(object sender, RoutedEventArgs e)
@@ -80,22 +107,18 @@ namespace MacroMeter
             ProfileGoal.Text = _user.Ciel;
         }
 
-        private void Settings_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
             new LoginWindow().Show();
             this.Close();
         }
+
         private void RecordWeight_Click(object sender, RoutedEventArgs e)
         {
             if (double.TryParse(NewWeightInput.Text, out double novaVaha) && novaVaha > 0)
             {
-                _user.Vaha = novaVaha; // Zmení aktuálnu váhu
-                weightHistory.Add(new WeightRecord { Date = DateTime.Now, Weight = novaVaha }); // Uloží do grafu
+                _user.Vaha = novaVaha; 
+                weightHistory.Add(new WeightRecord { Date = DateTime.Now, Weight = novaVaha }); 
 
                 NewWeightInput.Clear();
                 UpdateDashboardValues();
@@ -108,6 +131,9 @@ namespace MacroMeter
             }
         }
 
+        // ========================================================
+        // 1. STRANA: UKLADANIE NOVÉHO JEDLA DO DATABÁZY (ŠABLÓNA)
+        // ========================================================
         private void SaveFood_Click(object sender, RoutedEventArgs e)
         {
             bool isKcalOk = double.TryParse(CaloriesInput.Text, out double zadaneKcal);
@@ -117,26 +143,110 @@ namespace MacroMeter
 
             if (string.IsNullOrWhiteSpace(FoodNameInput.Text) || !isKcalOk)
             {
-                MessageBox.Show("Zadajte aspoň názov jedla a kalórie.");
+                MessageBox.Show("Zadajte aspoň názov jedla a kalórie na 100g.");
                 return;
             }
 
-            eatenCalories += zadaneKcal;
-            eatenProteins += isProtOk ? zadaneProt : 0;
-            eatenCarbs += isCarbOk ? zadaneCarb : 0;
-            eatenFats += isFatOk ? zadaneFat : 0;
+            // Vytvoríme jedlo a pridáme ho do našej centrálnej databázy na 100g
+            FoodEntry noveJedloDB = new FoodEntry
+            {
+                Nazov = FoodNameInput.Text,
+                Kalorie = zadaneKcal,
+                Bielkoviny = isProtOk ? zadaneProt : 0,
+                Sacharidy = isCarbOk ? zadaneCarb : 0,
+                Tuky = isFatOk ? zadaneFat : 0
+            };
 
-            UpdateDashboardValues();
+            CentralnaDatabazaJedal.Add(noveJedloDB);
 
+            // Vyčistenie formuláru
             FoodNameInput.Clear();
-            AmountInput.Clear();
             CaloriesInput.Clear();
             ProteinsInput.Clear();
             CarbsInput.Clear();
             FatsInput.Clear();
 
-            MessageBox.Show("Jedlo pridané!");
-            SearchFood_Click(sender, e);
+            MessageBox.Show($"Jedlo '{noveJedloDB.Nazov}' bolo úspešne pridané do šablón databázy!");
+            
+            // Automaticky prepneme používateľa na zápis príjmu, aby ho mohol rovno použiť
+            ZapisatPrijemMenu_Click(sender, e);
+        }
+
+        // ========================================================
+        // LIVE VYHĽADÁVANIE V DATABÁZE PRI PÍSANÍ
+        // ========================================================
+        private void FoodSearchBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string hladanyText = FoodSearchBox.Text.ToLower().Trim();
+
+            if (string.IsNullOrEmpty(hladanyText))
+            {
+                DatabaseListBox.ItemsSource = CentralnaDatabazaJedal;
+            }
+            else
+            {
+                var prefiltrovane = CentralnaDatabazaJedal
+                    .Where(j => j.Nazov.ToLower().Contains(hladanyText))
+                    .ToList();
+
+                DatabaseListBox.ItemsSource = prefiltrovane;
+            }
+        }
+
+        // ========================================================
+        // 2. STRANA: REÁLNY ZÁPIS VYBRANÉHO JEDLA DO DENNÉHO PRÍJMU
+        // ========================================================
+        private void ConfirmZapisPrijmu_Click(object sender, RoutedEventArgs e)
+        {
+            if (DatabaseListBox.SelectedItem is FoodEntry vybrateJedloNa100g)
+            {
+                if (!double.TryParse(GramazInput.Text, out double gramy) || gramy <= 0)
+                {
+                    MessageBox.Show("Zadajte platné množstvo v gramoch (číslo väčšie ako 0).", "Chyba", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                // Matematický prepočet: gramy / 100
+                double koeficient = gramy / 100.0;
+                string vybranyCas = (ComboTimeline.SelectedItem as ComboBoxItem).Content.ToString();
+
+                // Výpočet hodnôt na základe gramáže
+                double vypocitaneKcal = vybrateJedloNa100g.Kalorie * koeficient;
+                double vypocitaneProt = vybrateJedloNa100g.Bielkoviny * koeficient;
+                double vypocitaneCarb = vybrateJedloNa100g.Sacharidy * koeficient;
+                double vypocitaneFat = vybrateJedloNa100g.Tuky * koeficient;
+
+                // Pripočítanie ku globálnym denným štatistikám
+                eatenCalories += vypocitaneKcal;
+                eatenProteins += vypocitaneProt;
+                eatenCarbs += vypocitaneCarb;
+                eatenFats += vypocitaneFat;
+
+                // Pridanie záznamu do objektu usera pre neskorší zoznam denného príjmu
+                _user.DennýPrijem.Add(new FoodEntry
+                {
+                    Nazov = vybrateJedloNa100g.Nazov,
+                    Gramaz = gramy,
+                    CasDna = vybranyCas,
+                    Kalorie = vypocitaneKcal,
+                    Bielkoviny = vypocitaneProt,
+                    Sacharidy = vypocitaneCarb,
+                    Tuky = vypocitaneFat
+                });
+
+                UpdateDashboardValues();
+                GramazInput.Clear();
+                FoodSearchBox.Text = "";
+
+                MessageBox.Show($"Jedlo úspešne pridané do sekcie {vybranyCas}!");
+                
+                // Prepneme používateľa na hlavnú plochu
+                SearchFood_Click(sender, e);
+            }
+            else
+            {
+                MessageBox.Show("Vyberte kliknutím jedlo zo zoznamu pred stlačením zápisu.", "Upozornenie", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
         private void UpdateDashboardValues()
@@ -146,7 +256,8 @@ namespace MacroMeter
             double targetCarbs = (targetCalories * 0.5) / 4;
             double targetFats = (targetCalories * 0.25) / 9;
             double bmi = CalculateBMI(_user.Vaha, _user.Vyska);
-            BMIText.Text = $"{bmi:F1}";
+            
+            if (BMIText != null) BMIText.Text = $"{bmi:F1}";
 
             double remaining = targetCalories - eatenCalories;
             CaloriesText.Text = $"{eatenCalories:F0} / {targetCalories:F0} kcal";
@@ -161,6 +272,7 @@ namespace MacroMeter
 
             DrawWeightChart();
         }
+
         private void DrawWeightChart()
         {
             if (WeightChartCanvas == null || NoChartDataText == null) return;

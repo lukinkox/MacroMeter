@@ -6,7 +6,7 @@
         WindowStartupLocation="CenterScreen"
         Background="#F0F2F5"
         FontFamily="Segoe UI"
-                WindowState="Maximized"
+        WindowState="Maximized"
         WindowStyle="None"
         ResizeMode="NoResize">
 
@@ -62,8 +62,9 @@
 
                 <StackPanel Grid.Row="1" Margin="0,10">
                     <Button Content="🔍 Dashboard" Style="{StaticResource MenuButtonStyle}" Click="SearchFood_Click"/>
+                    <Button Content="🍽️ Zapísať príjem" Style="{StaticResource MenuButtonStyle}" Click="ZapisatPrijemMenu_Click"/>
                     <Button Content="📊 Denný príjem" Style="{StaticResource MenuButtonStyle}" Click="DailyIntake_Click"/>
-                    <Button Content="➕ Pridať jedlo" Style="{StaticResource MenuButtonStyle}" Click="AddFood_Click"/>
+                    <Button Content="➕ Pridať jedlo do DB" Style="{StaticResource MenuButtonStyle}" Click="AddFood_Click"/>
                     <Button Content="👤 Profil" Style="{StaticResource MenuButtonStyle}" Click="Profile_Click"/>
                 </StackPanel>
 
@@ -81,6 +82,7 @@
         </Border>
 
         <Grid Grid.Column="1">
+
             <ScrollViewer x:Name="DashboardSection" Visibility="Visible" VerticalScrollBarVisibility="Auto">
                 <StackPanel Margin="30">
                     <TextBlock x:Name="WelcomeText" Text="Ahoj! 👋" FontSize="28" FontWeight="Bold" Foreground="#2C3E50" Margin="10,0,0,5"/>
@@ -124,7 +126,7 @@
                             <StackPanel>
                                 <TextBlock Text="Cieľová váha" Foreground="#95A5A6" FontSize="14"/>
                                 <TextBlock x:Name="TargetWeightText" Text="0.0 kg" FontSize="26" FontWeight="Bold" Margin="0,5" Foreground="#2C3E50"/>
-                                <ProgressBar Value="0" Height="8" Margin="0,5" Background="#ECF0F1" Foreground="#3498DB"/>
+                                <ProgressBar x:Name="MainProgressBar" Value="0" Height="8" Margin="0,5" Background="#ECF0F1" Foreground="#3498DB"/>
                             </StackPanel>
                         </Border>
                     </UniformGrid>
@@ -136,7 +138,54 @@
                             <Canvas x:Name="WeightChartCanvas" Margin="10,20,10,20" Background="Transparent"/>
                         </Grid>
                     </Border>
+                </StackPanel>
+            </ScrollViewer>
 
+            <ScrollViewer x:Name="ZapisatPrijemSection" Visibility="Collapsed" VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="30">
+                    <TextBlock Text="🍽️ Zapísať jedlo do príjmu" FontSize="28" FontWeight="Bold" Foreground="#2C3E50" Margin="10,0,0,25"/>
+                    <Border Style="{StaticResource DashboardCard}">
+                        <StackPanel>
+                            <TextBlock Text="1. Vyberte čas dňa:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <ComboBox x:Name="ComboTimeline" Height="35" Margin="0,0,0,15" VerticalContentAlignment="Center">
+                                <ComboBoxItem Content="Raňajky" IsSelected="True"/>
+                                <ComboBoxItem Content="Desiata"/>
+                                <ComboBoxItem Content="Obed"/>
+                                <ComboBoxItem Content="Olovrant"/>
+                                <ComboBoxItem Content="Večera"/>
+                                <ComboBoxItem Content="Druhá večera"/>
+                            </ComboBox>
+
+                            <TextBlock Text="2. Vyhľadajte jedlo v databáze:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <TextBox x:Name="FoodSearchBox" Height="35" Margin="0,0,0,10" Padding="5,5" TextChanged="FoodSearchBox_TextChanged"/>
+
+                            <ListBox x:Name="DatabaseListBox" Height="180" Margin="0,0,0,15" Background="#F8F9FA">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Width="600">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="200"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Text="{Binding Nazov}" FontWeight="SemiBold" VerticalAlignment="Center" FontSize="14"/>
+                                            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Kalorie, StringFormat={}{0} kcal}" Margin="5,0" Foreground="#7F8C8D" FontWeight="Medium"/>
+                                                <TextBlock Text="{Binding Bielkoviny, StringFormat={}B: {0}g}" Margin="5,0" Foreground="#E67E22"/>
+                                                <TextBlock Text="{Binding Sacharidy, StringFormat={}S: {0}g}" Margin="5,0" Foreground="#3498DB"/>
+                                                <TextBlock Text="{Binding Tuky, StringFormat={}T: {0}g}" Margin="5,0" Foreground="#27AE60"/>
+                                                <TextBlock Text="(na 100g)" Margin="8,0,0,0" Foreground="#BDC3C7" FontSize="11" FontStyle="Italic"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+
+                            <TextBlock Text="3. Množstvo v gramoch (g):" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <TextBox x:Name="GramazInput" Height="35" Margin="0,0,0,20" Padding="5,5"/>
+
+                            <Button Content="ZAPÍSAŤ DO PRÍJMU" Click="ConfirmZapisPrijmu_Click" Height="45" Background="#2C3E50" Foreground="White" FontWeight="Bold"/>
+                        </StackPanel>
+                    </Border>
                 </StackPanel>
             </ScrollViewer>
 
@@ -167,31 +216,31 @@
 
             <ScrollViewer x:Name="AddFoodSection" Visibility="Collapsed" VerticalScrollBarVisibility="Auto">
                 <StackPanel Margin="30">
-                    <TextBlock Text="➕ Pridať nové jedlo" FontSize="28" FontWeight="Bold" Foreground="#2C3E50" Margin="10,0,0,25"/>
+                    <TextBlock Text="➕ Vytvoriť nové jedlo v šablónach (na 100g)" FontSize="28" FontWeight="Bold" Foreground="#2C3E50" Margin="10,0,0,25"/>
                     <Border Style="{StaticResource DashboardCard}">
                         <StackPanel>
                             <TextBlock Text="Názov jedla" FontWeight="SemiBold" Margin="0,0,0,5"/>
                             <TextBox x:Name="FoodNameInput" Height="35" Margin="0,0,0,15" Padding="5,5"/>
                             <UniformGrid Columns="2">
                                 <StackPanel Margin="0,0,10,15">
-                                    <TextBlock Text="Kalórie (kcal)" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                                    <TextBlock Text="Kalórie (kcal na 100g)" FontWeight="SemiBold" Margin="0,0,0,5"/>
                                     <TextBox x:Name="CaloriesInput" Height="35" Padding="5,5"/>
                                 </StackPanel>
                                 <StackPanel Margin="10,0,0,15">
-                                    <TextBlock Text="Množstvo (g)" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                                    <TextBox x:Name="AmountInput" Height="35" Padding="5,5"/>
+                                    <TextBlock Text="Množstvo (vždy 100g)" IsEnabled="False" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                                    <TextBox x:Name="AmountInput" Text="100" IsEnabled="False" Height="35" Padding="5,5" Background="#F0F2F5"/>
                                 </StackPanel>
                             </UniformGrid>
-                            <TextBlock Text="Bielkoviny (g)" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <TextBlock Text="Bielkoviny (g na 100g)" FontWeight="SemiBold" Margin="0,0,0,5"/>
                             <TextBox x:Name="ProteinsInput" Height="35" Margin="0,0,0,15" Padding="5,5"/>
 
-                            <TextBlock Text="Sacharidy (g)" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <TextBlock Text="Sacharidy (g na 100g)" FontWeight="SemiBold" Margin="0,0,0,5"/>
                             <TextBox x:Name="CarbsInput" Height="35" Margin="0,0,0,15" Padding="5,5"/>
 
-                            <TextBlock Text="Tuky (g)" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <TextBlock Text="Tuky (g na 100g)" FontWeight="SemiBold" Margin="0,0,0,25" Padding="5,5"/>
                             <TextBox x:Name="FatsInput" Height="35" Margin="0,0,0,25" Padding="5,5"/>
 
-                            <Button Content="ULOŽIŤ JEDLO" Click="SaveFood_Click" Height="45" Background="#27AE60" Foreground="White" FontWeight="Bold"/>
+                            <Button Content="ULOŽIŤ DO DATABÁZY" Click="SaveFood_Click" Height="45" Background="#27AE60" Foreground="White" FontWeight="Bold"/>
                         </StackPanel>
                     </Border>
                 </StackPanel>
