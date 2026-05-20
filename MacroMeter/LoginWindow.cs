@@ -12,7 +12,7 @@ namespace MacroMeter
         }
         private void CloseWindow_Click(object sender, RoutedEventArgs e)
         {
-            this.Close(); // Zatvorí okno prihlásenia (a celú aplikáciu)
+            this.Close();
         }   
         private void Login_Click(object sender, RoutedEventArgs e)
         {

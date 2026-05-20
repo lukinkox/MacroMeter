@@ -59,6 +59,10 @@ namespace MacroMeter
             HideAllSections();
             AddFoodSection.Visibility = Visibility.Visible;
         }
+        private void CloseWindow_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close(); 
+        }
 
         private void DailyIntake_Click(object sender, RoutedEventArgs e)
         {
