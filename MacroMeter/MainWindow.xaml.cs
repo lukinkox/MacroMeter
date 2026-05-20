@@ -271,16 +271,10 @@ namespace MacroMeter
         {
             return 2500; 
         }
-        private double CalculateBMI(double vaha, double vyska)
-        {
-            if (vyska <= 0) return 0;
-            double vyskaM = vyska / 100.0;
-            return vaha / (vyskaM * vyskaM);
-        }
 
-        private double CalculateCalories()
+        private void HighlightActiveMenu(Button activeButton)
         {
-            return 2500; 
+            if (activeButton == null) return;
         }
         private double CalculateBMI(double vaha, double vyska)
         {
