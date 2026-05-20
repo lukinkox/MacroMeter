@@ -192,10 +192,12 @@
             <ScrollViewer x:Name="DailyIntakeSection" Visibility="Collapsed" VerticalScrollBarVisibility="Auto">
                 <StackPanel Margin="30">
                     <TextBlock Text="📊 Detailný denný príjem" FontSize="28" FontWeight="Bold" Foreground="#2C3E50" Margin="10,0,0,25"/>
-                    <Border Style="{StaticResource DashboardCard}">
+
+                    <Border Style="{StaticResource DashboardCard}" Margin="0,0,0,20">
                         <StackPanel>
-                            <TextBlock Text="Dnešné makroživiny" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,15"/>
-                            <UniformGrid Columns="3">
+                            <TextBlock Text="Dnešný prehľad živín" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,15"/>
+
+                            <UniformGrid Columns="3" Margin="0,0,0,15">
                                 <StackPanel HorizontalAlignment="Center">
                                     <TextBlock Text="Bielkoviny" Foreground="#7F8C8D" HorizontalAlignment="Center"/>
                                     <TextBlock x:Name="ProteinsText" Text="0g / 0g" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center"/>
@@ -209,8 +211,74 @@
                                     <TextBlock x:Name="FatsText" Text="0g / 0g" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center"/>
                                 </StackPanel>
                             </UniformGrid>
+
+                            <Separator Margin="0,10" Background="#BDC3C7"/>
+
+                            <UniformGrid Columns="5">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock Text="Kalórie" Foreground="#7F8C8D" HorizontalAlignment="Center"/>
+                                    <TextBlock x:Name="CaloriesDetailText" Text="0 kcal" FontSize="14" FontWeight="Bold" Foreground="Orange" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock Text="Vláknina" Foreground="#7F8C8D" HorizontalAlignment="Center"/>
+                                    <TextBlock x:Name="FiberDetailText" Text="0g" FontSize="14" FontWeight="Bold" Foreground="Green" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock Text="Vit. C / D" Foreground="#7F8C8D" HorizontalAlignment="Center"/>
+                                    <TextBlock x:Name="VitaminsDetailText" Text="0mg / 0µg" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock Text="Horčík" Foreground="#7F8C8D" HorizontalAlignment="Center"/>
+                                    <TextBlock x:Name="MagnesiumDetailText" Text="0mg" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock Text="Železo" Foreground="#7F8C8D" HorizontalAlignment="Center"/>
+                                    <TextBlock x:Name="IronDetailText" Text="0mg" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </UniformGrid>
                         </StackPanel>
                     </Border>
+
+                    <Border Style="{StaticResource DashboardCard}">
+                        <StackPanel>
+                            <TextBlock Text="Zoznam zjedzených jedál" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,15"/>
+
+                            <ListBox Name="lbDennyPrijem" BorderThickness="0" Background="Transparent">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="5" Width="850">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="150"/>
+                                                <ColumnDefinition Width="60"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="70"/>
+                                                <ColumnDefinition Width="70"/>
+                                                <ColumnDefinition Width="70"/>
+                                                <ColumnDefinition Width="70"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="70"/>
+                                                <ColumnDefinition Width="65"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <TextBlock Text="{Binding Nazov}" Grid.Column="0" FontWeight="Bold"/>
+                                            <TextBlock Text="{Binding Gramaz, StringFormat={}{0}g}" Grid.Column="1" Foreground="Gray"/>
+                                            <TextBlock Text="{Binding Kalorie, StringFormat={}{0} kcal}" Grid.Column="2" Foreground="Orange" FontWeight="SemiBold"/>
+                                            <TextBlock Text="{Binding Bielkoviny, StringFormat={}B: {0}g}" Grid.Column="3"/>
+                                            <TextBlock Text="{Binding Sacharidy, StringFormat={}S: {0}g}" Grid.Column="4"/>
+                                            <TextBlock Text="{Binding Tuky, StringFormat={}T: {0}g}" Grid.Column="5"/>
+                                            <TextBlock Text="{Binding Vlaknina, StringFormat={}Vl: {0}g}" Grid.Column="6" Foreground="Green"/>
+                                            <TextBlock Text="{Binding VitaminC, StringFormat={}C: {0}mg}" Grid.Column="7" Foreground="#16A085"/>
+                                            <TextBlock Text="{Binding VitaminD, StringFormat={}D: {0}µg}" Grid.Column="8" Foreground="#2980B9"/>
+                                            <TextBlock Text="{Binding Horcik, StringFormat={}Mg: {0}mg}" Grid.Column="9" Foreground="#8E44AD"/>
+                                            <TextBlock Text="{Binding Zelezo, StringFormat={}Fe: {0}mg}" Grid.Column="10" Foreground="#C0392B"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </StackPanel>
+                    </Border>
+
                 </StackPanel>
             </ScrollViewer>
 

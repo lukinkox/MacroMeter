@@ -11,8 +11,10 @@ namespace MacroMeter
         public double Tuky { get; set; }
         public double Gramaz { get; set; }
         public string CasDna { get; set; }
+        public double Vlaknina { get; set; }  // v gramoch
+        public double VitaminC { get; set; }   // v mg
+        public double VitaminD { get; set; } // v mcg
+        public double Horcik { get; set; }   // v mg
+        public double Zelezo { get; set; }  // v mg
     }
-
-    // Tvoja trieda User by mala mať túto vlastnosť:
-    // public List<FoodEntry> DennýPrijem { get; set; } = new List<FoodEntry>();
 }
