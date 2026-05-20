@@ -61,11 +61,11 @@
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Margin="0,10">
-                    <Button Content="🔍 Dashboard" Style="{StaticResource MenuButtonStyle}" Click="SearchFood_Click"/>
-                    <Button Content="🍽️ Zapísať príjem" Style="{StaticResource MenuButtonStyle}" Click="ZapisatPrijemMenu_Click"/>
-                    <Button Content="📊 Denný príjem" Style="{StaticResource MenuButtonStyle}" Click="DailyIntake_Click"/>
-                    <Button Content="➕ Pridať jedlo do DB" Style="{StaticResource MenuButtonStyle}" Click="AddFood_Click"/>
-                    <Button Content="👤 Profil" Style="{StaticResource MenuButtonStyle}" Click="Profile_Click"/>
+                    <Button x:Name="MenuDashBoardBtn"  Content="🔍 Dashboard" Style="{StaticResource MenuButtonStyle}" Click="SearchFood_Click"/>
+                    <Button x:Name="MenuZapisatPrijemBtn" Content="🍽️ Zapísať príjem" Style="{StaticResource MenuButtonStyle}" Click="ZapisatPrijemMenu_Click"/>
+                    <Button x:Name="MenuDailyIntakeBtn" Content="📊 Denný príjem" Style="{StaticResource MenuButtonStyle}" Click="DailyIntake_Click"/>
+                    <Button x:Name="MenuAddFoodBtn" Content="➕ Pridať jedlo do DB" Style="{StaticResource MenuButtonStyle}" Click="AddFood_Click"/>
+                    <Button x:Name="MenuProfileBtn" Content="👤 Profil" Style="{StaticResource MenuButtonStyle}" Click="Profile_Click"/>
                 </StackPanel>
 
                 <Button Grid.Row="2" Content="🚪 Odhlásiť sa" 

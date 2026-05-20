@@ -65,12 +65,12 @@ namespace MacroMeter
 
             UpdateDashboardValues();
             WeightChartCanvas.SizeChanged += (s, e) => DrawWeightChart();
-            HighlightActiveMenu(MenuDashboardBtn);
+            HighlightActiveMenu(MenuDashBoardBtn);
         }
 
         private void HighlightActiveMenu(Button activeBtn)
         {
-            var menuButtons = new List<Button> { MenuDashboardBtn, MenuZapisatPrijemBtn, MenuDailyIntakeBtn, MenuAddFoodBtn, MenuProfileBtn };
+            var menuButtons = new List<Button> { MenuDashBoardBtn, MenuZapisatPrijemBtn, MenuDailyIntakeBtn, MenuAddFoodBtn, MenuProfileBtn };
 
             foreach (var btn in menuButtons)
             {
@@ -102,7 +102,7 @@ namespace MacroMeter
         {
             HideAllSections();
             DashboardSection.Visibility = Visibility.Visible;
-            HighlightActiveMenu(MenuDashboardBtn);
+            HighlightActiveMenu(MenuDashBoardBtn);
             DrawWeightChart();
         }
 
