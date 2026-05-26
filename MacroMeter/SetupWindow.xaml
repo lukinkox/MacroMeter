@@ -93,7 +93,16 @@
                             </ComboBox>
                         </Border>
 
-                        <!-- Cieľ -->
+                        <TextBlock Text="Preferovaný štýl diéty" Foreground="#34495E" FontWeight="SemiBold" Margin="0,0,0,5" FontSize="12"/>
+                        <Border BorderBrush="#DCE1E8" BorderThickness="1" CornerRadius="8" Margin="0,0,0,30">
+                            <ComboBox x:Name="DietBox" Height="35" BorderThickness="0" Background="Transparent" VerticalContentAlignment="Center" Padding="10,0">
+                                <ComboBoxItem Content="Vyvážená (Racionálna)"/>
+                                <ComboBoxItem Content="Nízkosacharidová (Low Carb)"/>
+                                <ComboBoxItem Content="Ketogénna (Keto)"/>
+                                <ComboBoxItem Content="Vysokobielkovinová (High Protein)"/>
+                            </ComboBox>
+                        </Border>
+                        
                         <TextBlock Text="Váš cieľ" Foreground="#34495E" FontWeight="SemiBold" Margin="0,0,0,5" FontSize="12"/>
                         <Border BorderBrush="#DCE1E8" BorderThickness="1" CornerRadius="8" Margin="0,0,0,30">
                             <ComboBox x:Name="GoalBox" Height="35" BorderThickness="0" Background="Transparent" VerticalContentAlignment="Center" Padding="10,0">
@@ -103,7 +112,6 @@
                             </ComboBox>
                         </Border>
 
-                        <!-- Tlačidlo -->
                         <Button x:Name="FinishButton"
                                 Content="DOKONČIŤ NASTAVENIE"
                                 Height="50"

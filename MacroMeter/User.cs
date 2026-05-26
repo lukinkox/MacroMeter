@@ -18,7 +18,11 @@ namespace MacroMeter
         public string Aktivita { get; set; }
         public string Ciel { get; set; }
 
-        // SEM SA BUDÚ UKLADAŤ ZJEDZENÉ JEDLÁ
+        public string Dieta { get; set; }
+        public double TargetCalories { get; set; }
+        public double TargetProteins { get; set; }
+        public double TargetCarbs { get; set; }
+        public double TargetFats { get; set; }
         public List<FoodEntry> DennýPrijem { get; set; } = new List<FoodEntry>();
     }
 }
