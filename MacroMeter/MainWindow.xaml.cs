@@ -47,6 +47,16 @@ namespace MacroMeter
             CentralnaDatabazaJedal.Add(new FoodEntry { Nazov = "Ryža Basmati raw", Kalorie = 350, Bielkoviny = 7.5, Sacharidy = 78, Tuky = 0.6 });
             CentralnaDatabazaJedal.Add(new FoodEntry { Nazov = "Vajíčko celé (ks)", Kalorie = 143, Bielkoviny = 12.6, Sacharidy = 0.7, Tuky = 9.5 });
             CentralnaDatabazaJedal.Add(new FoodEntry { Nazov = "Banán", Kalorie = 89, Bielkoviny = 1.1, Sacharidy = 23, Tuky = 0.3 });
+            CentralnaDatabazaJedal.Add(new FoodEntry { Nazov = "Hovädzie mleté 10% tuku", Kalorie = 176, Bielkoviny = 20, Sacharidy = 0, Tuky = 10, Vlaknina = 0, VitaminC = 0, VitaminD = 0.1, Horcik = 19, Zelezo = 2.3 });
+            CentralnaDatabazaJedal.Add(new FoodEntry { Nazov = "Morčacie prsia (surové)", Kalorie = 104, Bielkoviny = 22.3, Sacharidy = 0, Tuky = 1.1, Vlaknina = 0, VitaminC = 0, VitaminD = 0.1, Horcik = 28, Zelezo = 0.8 });
+            CentralnaDatabazaJedal.Add(new FoodEntry { Nazov = "Tuniak vo vlastnej šťave", Kalorie = 116, Bielkoviny = 26, Sacharidy = 0, Tuky = 1, Vlaknina = 0, VitaminC = 0, VitaminD = 2.1, Horcik = 33, Zelezo = 1.3 });
+            CentralnaDatabazaJedal.Add(new FoodEntry { Nazov = "Grécky jogurt 0% tuku", Kalorie = 57, Bielkoviny = 10.3, Sacharidy = 3.6, Tuky = 0, Vlaknina = 0, VitaminC = 0, VitaminD = 0, Horcik = 11, Zelezo = 0.1 });
+            CentralnaDatabazaJedal.Add(new FoodEntry { Nazov = "Zemiaky neskoré (surové)", Kalorie = 77, Bielkoviny = 2, Sacharidy = 17, Tuky = 0.1, Vlaknina = 2.2, VitaminC = 19.7, VitaminD = 0, Horcik = 23, Zelezo = 0.8 });
+            CentralnaDatabazaJedal.Add(new FoodEntry { Nazov = "Batáty - Sladké zemiaky", Kalorie = 86, Bielkoviny = 1.6, Sacharidy = 20, Tuky = 0.1, Vlaknina = 3, VitaminC = 2.4, VitaminD = 0, Horcik = 25, Zelezo = 0.6 });
+            CentralnaDatabazaJedal.Add(new FoodEntry { Nazov = "Brokolica", Kalorie = 34, Bielkoviny = 2.8, Sacharidy = 7, Tuky = 0.4, Vlaknina = 2.6, VitaminC = 89.2, VitaminD = 0, Horcik = 21, Zelezo = 0.7 });
+            CentralnaDatabazaJedal.Add(new FoodEntry { Nazov = "Arašidové maslo", Kalorie = 588, Bielkoviny = 25, Sacharidy = 20, Tuky = 50, Vlaknina = 6, VitaminC = 0, VitaminD = 0, Horcik = 154, Zelezo = 1.9 });
+            CentralnaDatabazaJedal.Add(new FoodEntry { Nazov = "Avokádo", Kalorie = 160, Bielkoviny = 2, Sacharidy = 8.5, Tuky = 14.7, Vlaknina = 6.7, VitaminC = 10, VitaminD = 0, Horcik = 29, Zelezo = 0.6 });
+            CentralnaDatabazaJedal.Add(new FoodEntry { Nazov = "Čučoriedky", Kalorie = 57, Bielkoviny = 0.7, Sacharidy = 14, Tuky = 0.3, Vlaknina = 2.4, VitaminC = 9.7, VitaminD = 0, Horcik = 6, Zelezo = 0.3 });
 
             DatabaseListBox.ItemsSource = CentralnaDatabazaJedal;
             weightHistory.Add(new WeightRecord { Date = DateTime.Now.AddDays(-15), Weight = _user.Vaha + 2.5 });
@@ -230,10 +240,7 @@ namespace MacroMeter
                 MessageBox.Show("Vyberte kliknutím jedlo zo zoznamu pred stlačením zápisu.", "Upozornenie", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
-        private double CalculateCalories()
-        {
-            return 2500; 
-        }
+
         private void HighlightActiveMenu(Button activeButton)
         {
             if (activeButton == null) return;
@@ -246,10 +253,10 @@ namespace MacroMeter
         }
         private void UpdateDashboardValues()
         {
-            double targetCalories = CalculateCalories();
-            double targetProteins = _user.Vaha * 1.8;
-            double targetCarbs = (targetCalories * 0.5) / 4;
-            double targetFats = (targetCalories * 0.25) / 9;
+            double targetCalories = _user.TargetCalories;
+            double targetProteins = _user.TargetProteins;
+            double targetCarbs = _user.TargetCarbs;
+            double targetFats = _user.TargetFats;
             double bmi = CalculateBMI(_user.Vaha, _user.Vyska);
             if (BMIText != null) BMIText.Text = $"{bmi:F1}";
             double remaining = targetCalories - eatenCalories;
