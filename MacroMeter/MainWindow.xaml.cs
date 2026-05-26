@@ -14,7 +14,6 @@ namespace MacroMeter
         public DateTime Date { get; set; }
         public double Weight { get; set; }
     }
-
     public partial class MainWindow : Window
     {
         private User _user;
@@ -22,26 +21,18 @@ namespace MacroMeter
         private double eatenProteins = 0;
         private double eatenCarbs = 0;
         private double eatenFats = 0;
-
-        // NOVÉ GLOBÁLNE PREMENNÉ PRE SÚČET MIKROŽIVÍN V DANÝ DEŇ
         private double eatenVlaknina = 0;
         private double eatenVitaminC = 0;
         private double eatenVitaminD = 0;
         private double eatenHorcik = 0;
         private double eatenZelezo = 0;
-
         private List<WeightRecord> weightHistory = new List<WeightRecord>();
-
         private ObservableCollection<FoodEntry> CentralnaDatabazaJedal = new ObservableCollection<FoodEntry>();
-
         public MainWindow(User user)
         {
             InitializeComponent();
             _user = user;
-
             WelcomeText.Text = $"Vitaj, {_user.Meno}! 👋";
-
-            // Predvolené jedlá pri štarte aplikácie (všetky na 100g)
             CentralnaDatabazaJedal.Add(new FoodEntry { Nazov = "Kuracie prsia (surové)", Kalorie = 120, Bielkoviny = 23, Sacharidy = 0, Tuky = 2.6, Vlaknina = 0, VitaminC = 0, VitaminD = 0.1, Horcik = 29, Zelezo = 1.0 });
             CentralnaDatabazaJedal.Add(new FoodEntry { Nazov = "Ryža Basmati (surová)", Kalorie = 350, Bielkoviny = 7.5, Sacharidy = 78, Tuky = 0.6, Vlaknina = 1.2, VitaminC = 0, VitaminD = 0, Horcik = 25, Zelezo = 1.2 });
             CentralnaDatabazaJedal.Add(new FoodEntry { Nazov = "Vajíčko celé (ks)", Kalorie = 143, Bielkoviny = 12.6, Sacharidy = 0.7, Tuky = 9.5, Vlaknina = 0, VitaminC = 0, VitaminD = 1.1, Horcik = 12, Zelezo = 1.2 });
@@ -66,7 +57,6 @@ namespace MacroMeter
             UpdateDashboardValues();
             WeightChartCanvas.SizeChanged += (s, e) => DrawWeightChart();
         }
-
         private void HideAllSections()
         {
             DashboardSection.Visibility = Visibility.Collapsed;
@@ -75,37 +65,30 @@ namespace MacroMeter
             ProfileSection.Visibility = Visibility.Collapsed;
             ZapisatPrijemSection.Visibility = Visibility.Collapsed;
         }
-
         private void SearchFood_Click(object sender, RoutedEventArgs e)
         {
             HideAllSections();
             DashboardSection.Visibility = Visibility.Visible;
             DrawWeightChart(); 
         }
-
         private void AddFood_Click(object sender, RoutedEventArgs e)
         {
             HideAllSections();
             AddFoodSection.Visibility = Visibility.Visible;
             HighlightActiveMenu(MenuAddFoodBtn);
         }
-
         private void CloseWindow_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
-
         private void ZapisatPrijemMenu_Click(object sender, RoutedEventArgs e)
         {
             HideAllSections();
             ZapisatPrijemSection.Visibility = Visibility.Visible;
-            
-            // Reset textových polí
             FoodSearchBox.Text = "";
             GramazInput.Text = "";
             DatabaseListBox.ItemsSource = CentralnaDatabazaJedal;
         }
-
         private void DailyIntake_Click(object sender, RoutedEventArgs e)
         {
             HideAllSections();
@@ -113,7 +96,6 @@ namespace MacroMeter
             HighlightActiveMenu(MenuDailyIntakeBtn);
             UpdateDashboardValues();
         }
-
         private void Profile_Click(object sender, RoutedEventArgs e)
         {
             HideAllSections();
@@ -127,13 +109,11 @@ namespace MacroMeter
             ProfileActivity.Text = _user.Aktivita;
             ProfileGoal.Text = _user.Ciel;
         }
-
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
             new LoginWindow().Show();
             this.Close();
         }
-
         private void RecordWeight_Click(object sender, RoutedEventArgs e)
         {
             if (double.TryParse(NewWeightInput.Text, out double novaVaha) && novaVaha > 0)
@@ -154,7 +134,6 @@ namespace MacroMeter
 
         private void SaveFood_Click(object sender, RoutedEventArgs e)
         {
-            // Pozor: Tu zatiaľ ukladáš iba makrá, ak budeš chcieť, môžeme neskôr pridať políčka aj pre vitamíny na tejto obrazovke
             bool isKcalOk = double.TryParse(CaloriesInput.Text, out double zadaneKcal);
             bool isProtOk = double.TryParse(ProteinsInput.Text, out double zadaneProt);
             bool isCarbOk = double.TryParse(CarbsInput.Text, out double zadaneCarb);
@@ -165,7 +144,6 @@ namespace MacroMeter
                 MessageBox.Show("Zadajte aspoň názov jedla a kalórie na 100g.");
                 return;
             }
-
             FoodEntry noveJedloDB = new FoodEntry
             {
                 Nazov = FoodNameInput.Text,
@@ -177,11 +155,9 @@ namespace MacroMeter
                 VitaminC = 0,
                 VitaminD = 0,
                 Horcik = 0,
-                Zelezo = 0 // Predvolené nuly pri ručnom pridaní šablóny
+                Zelezo = 0 
             };
-
             CentralnaDatabazaJedal.Add(noveJedloDB);
-
             FoodNameInput.Clear();
             CaloriesInput.Clear();
             ProteinsInput.Clear();
@@ -191,7 +167,6 @@ namespace MacroMeter
             MessageBox.Show($"Jedlo '{noveJedloDB.Nazov}' bolo úspešne pridané do šablón databázy!");
             ZapisatPrijemMenu_Click(sender, e);
         }
-
         private void FoodSearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             string hladanyText = FoodSearchBox.Text.ToLower().Trim();
@@ -209,10 +184,6 @@ namespace MacroMeter
                 DatabaseListBox.ItemsSource = prefiltrovane;
             }
         }
-
-        // ========================================================
-        // 2. STRANA: REÁLNY ZÁPIS VYBRANÉHO JEDLA DO DENNÉHO PRÍJMU
-        // ========================================================
         private void ConfirmZapisPrijmu_Click(object sender, RoutedEventArgs e)
         {
             if (DatabaseListBox.SelectedItem is FoodEntry vybrateJedloNa100g)
@@ -222,25 +193,21 @@ namespace MacroMeter
                     MessageBox.Show("Zadajte platné množstvo v gramoch (číslo väčšie ako 0).", "Chyba", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
-
                 double koeficient = gramy / 100.0;
                 string vybranyCas = "Obed";
                 if (ComboTimeline.SelectedItem is ComboBoxItem item && item.Content != null)
                 {
                     vybranyCas = item.Content.ToString();
                 }
-
                 double vypocitaneKcal = vybrateJedloNa100g.Kalorie * koeficient;
                 double vypocitaneProt = vybrateJedloNa100g.Bielkoviny * koeficient;
                 double vypocitaneCarb = vybrateJedloNa100g.Sacharidy * koeficient;
                 double vypocitaneFat = vybrateJedloNa100g.Tuky * koeficient;
-
                 // Pripočítanie ku globálnym denným štatistikám
                 eatenCalories += vypocitaneKcal;
                 eatenProteins += vypocitaneProt;
                 eatenCarbs += vypocitaneCarb;
                 eatenFats += vypocitaneFat;
-
                 // Pridanie záznamu do objektu usera pre neskorší zoznam denného príjmu
                 _user.DennýPrijem.Add(new FoodEntry
                 {
@@ -252,12 +219,9 @@ namespace MacroMeter
                     Sacharidy = vypocitaneCarb,
                     Tuky = vypocitaneFat
                 });
-
-
                 UpdateDashboardValues();
                 GramazInput.Clear();
                 FoodSearchBox.Text = "";
-
                 MessageBox.Show($"Jedlo úspešne pridané do sekcie {vybranyCas}!");
                 SearchFood_Click(sender, e);
             }
@@ -266,12 +230,10 @@ namespace MacroMeter
                 MessageBox.Show("Vyberte kliknutím jedlo zo zoznamu pred stlačením zápisu.", "Upozornenie", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
-
         private double CalculateCalories()
         {
             return 2500; 
         }
-
         private void HighlightActiveMenu(Button activeButton)
         {
             if (activeButton == null) return;
@@ -282,7 +244,6 @@ namespace MacroMeter
             double vyskaM = vyska / 100.0;
             return vaha / (vyskaM * vyskaM);
         }
-
         private void UpdateDashboardValues()
         {
             double targetCalories = CalculateCalories();
@@ -290,66 +251,80 @@ namespace MacroMeter
             double targetCarbs = (targetCalories * 0.5) / 4;
             double targetFats = (targetCalories * 0.25) / 9;
             double bmi = CalculateBMI(_user.Vaha, _user.Vyska);
-
             if (BMIText != null) BMIText.Text = $"{bmi:F1}";
-
             double remaining = targetCalories - eatenCalories;
             if (CaloriesText != null) CaloriesText.Text = $"{eatenCalories:F0} / {targetCalories:F0} kcal";
             if (RemainingCaloriesText != null) RemainingCaloriesText.Text = remaining > 0 ? $"Zostáva {remaining:F0} kcal" : "Cieľ splnený!";
-
             if (WeightText != null) WeightText.Text = $"{_user.Vaha} kg";
             if (TargetWeightText != null) TargetWeightText.Text = $"{_user.CielovaVaha} kg";
-
             if (ProteinsText != null) ProteinsText.Text = $"{eatenProteins:F0}g / {targetProteins:F0}g";
             if (CarbsText != null) CarbsText.Text = $"{eatenCarbs:F0}g / {targetCarbs:F0}g";
             if (FatsText != null) FatsText.Text = $"{eatenFats:F0}g / {targetFats:F0}g";
-
+            double rozdiel = _user.CielovaVaha - _user.Vaha;
+            if (RemainingWeightText != null)
+            {
+                if (_user.Vaha == _user.CielovaVaha)
+                {
+                    RemainingWeightText.Text = "Cieľ splnený! 🎉";
+                }
+                else if (_user.Vaha < _user.CielovaVaha)
+                {
+                    RemainingWeightText.Text = $"Do cieľa ti chýba ešte {Math.Abs(rozdiel):F1} kg";
+                }
+                else
+                {
+                    RemainingWeightText.Text = "Cieľ splnený! 🎉";
+                }
+            }
             DrawWeightChart();
+        }   
+        private void AktualizujVahuText()
+        {
+            double rozdiel = _user.CielovaVaha - _user.Vaha;
+            if (RemainingWeightText != null)
+            {
+                if (rozdiel > 0)
+                {
+                    RemainingWeightText.Text = $"Do cieľa ti chýba ešte {rozdiel:F1} kg";
+                }
+                else
+                {
+                    RemainingWeightText.Text = "Cieľ splnený!";
+                }
+            }
         }
-
         private void DrawWeightChart()
         {
             if (WeightChartCanvas == null || NoChartDataText == null) return;
-
             WeightChartCanvas.Children.Clear();
-
             if (weightHistory.Count < 2)
             {
                 NoChartDataText.Visibility = Visibility.Visible;
                 return;
             }
-
             NoChartDataText.Visibility = Visibility.Collapsed;
-
             double width = WeightChartCanvas.ActualWidth;
             double height = WeightChartCanvas.ActualHeight;
-
             if (width < 50 || height < 50) return;
-
             double paddingX = 40;
             double paddingY = 30;
-
             double minW = double.MaxValue;
             double maxW = double.MinValue;
-
             foreach (var r in weightHistory)
             {
                 if (r.Weight < minW) minW = r.Weight;
                 if (r.Weight > maxW) maxW = r.Weight;
             }
-
             if (maxW == minW)
             {
                 minW -= 5;
                 maxW += 5;
             }
-
             Polyline progressLine = new Polyline
             {
-                Stroke = new SolidColorBrush(Color.FromRgb(52, 152, 219)), // Modrá farba #3498DB
+                Stroke = new SolidColorBrush(Color.FromRgb(52, 152, 219)),
                 StrokeThickness = 3
             };
-
             for (int i = 0; i < weightHistory.Count; i++)
             {
                 double x = paddingX + (i * (width - 2 * paddingX) / (weightHistory.Count - 1));
@@ -364,7 +339,6 @@ namespace MacroMeter
                     Stroke = Brushes.White,
                     StrokeThickness = 2
                 };
-
                 Canvas.SetLeft(pointCircle, x - 4);
                 Canvas.SetTop(pointCircle, y - 4);
                 WeightChartCanvas.Children.Add(pointCircle);
@@ -374,14 +348,11 @@ namespace MacroMeter
                     FontSize = 10,
                     Foreground = Brushes.Gray
                 };
-
                 weightLabel.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
                 Canvas.SetLeft(weightLabel, x - (weightLabel.DesiredSize.Width / 2));
                 Canvas.SetTop(weightLabel, y - 20);
-
                 WeightChartCanvas.Children.Add(weightLabel);
             }
-
             WeightChartCanvas.Children.Insert(0, progressLine);
         }
     }
