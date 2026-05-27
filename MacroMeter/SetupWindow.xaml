@@ -53,7 +53,7 @@
                             <TextBox x:Name="AgeBox" Height="35" BorderThickness="0" Background="Transparent" VerticalContentAlignment="Center" Padding="10,0"/>
                         </Border>
 
-                        <!-- Váha Grid -->
+                        <!-- vaha grid -->
                         <Grid Margin="0,0,0,15">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -76,7 +76,7 @@
                             </StackPanel>
                         </Grid>
 
-                        <!-- Výška -->
+                        <!-- Vyska -->
                         <TextBlock Text="Výška (cm)" Foreground="#34495E" FontWeight="SemiBold" Margin="0,0,0,5" FontSize="12"/>
                         <Border BorderBrush="#DCE1E8" BorderThickness="1" CornerRadius="8" Margin="0,0,0,15">
                             <TextBox x:Name="HeightBox" Height="35" BorderThickness="0" Background="Transparent" VerticalContentAlignment="Center" Padding="10,0"/>

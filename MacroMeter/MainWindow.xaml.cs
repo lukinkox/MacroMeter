@@ -174,7 +174,7 @@ namespace MacroMeter
             CarbsInput.Clear();
             FatsInput.Clear();
 
-            MessageBox.Show($"Jedlo '{noveJedloDB.Nazov}' bolo úspešne pridané do šablón databázy!");
+            MessageBox.Show($"Jedlo '{noveJedloDB.Nazov}' bolo úspešne pridané do databázy!");
             ZapisatPrijemMenu_Click(sender, e);
         }
         private void FoodSearchBox_TextChanged(object sender, TextChangedEventArgs e)
